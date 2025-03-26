@@ -1,0 +1,61 @@
+*&---------------------------------------------------------------------*
+*& Report Z_STRING_OB
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT Z_STRING_OB.
+*&---------------------------------------------------------------------*
+
+PARAMETERS p_acc type n LENGTH 12.
+data v_name(50) type c value 'Capgemini  india  Ltd'.
+
+write : / 'v_name initially' COLOR 1, 25 v_name COLOR 3.
+
+
+CONDENSE v_name NO-GAPS.
+write : / 'v_name after Condense' COLOR 1, 25 v_name COLOR 3.
+
+
+TRANSLATE v_name TO UPPER CASE.
+write : / 'v_name after in Caps' COLOR 1, 25 v_name COLOR 3.
+
+data(v_len) = strlen( v_name ) .
+
+
+write : / 'v_name''s length' COLOR 1, 25 v_len COLOR 3.
+
+write : / 'Acc no is' COLOR 1, p_acc COLOR 3.
+
+
+SHIFT  p_acc LEFT DELETING LEADING '0'.
+write : / 'Acc no after shift ' COLOR 1, p_acc COLOR 3.
+
+
+v_len = strlen( p_acc ) .
+write : / 'Acc', p_acc color 1,  'size' COLOR 1, v_len COLOR 3.
+
+if v_len < 12 .
+  write : / 'Acc No must be 12 in Size'.
+else.
+  write : / p_acc , 'Is Valid Acc but not' color 3, v_len COLOR 7.
+endif.
+
+
+
+CONCATENATE v_name 'WhiteField' 'Bengaluru' 'IN' into data(v_org)
+                      SEPARATED BY ','.
+write : / 'Org after Concate' COLOR 1, v_org color 3.
+
+
+
+split v_org at ',' into v_name  data(v_street) data(v_city)
+                        data(v_ctry).
+
+write : / 'v_name after split' COLOR 1, v_name COLOR 3.
+
+
+
+write : / 'street after split' COLOR 1, v_street COLOR 3.
+write : / 'city after split' COLOR 1, v_city COLOR 3.
+write : / 'Country after split' COLOR 1, v_ctry COLOR 3.
+write : / 'Org after SPLIT' COLOR 1, v_org color 3.
