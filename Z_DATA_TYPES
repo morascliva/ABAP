@@ -1,0 +1,44 @@
+*&---------------------------------------------------------------------*
+*& Report Z_DATA_TYPES
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT Z_DATA_TYPES.
+* ------------------*
+
+
+data v_doj type d .
+data v1_name type string.
+data v2_name(25) type c.
+data v3_name type c LENGTH 35.
+
+
+write : / 'Date'  COLOR 1, v_doj color 3.
+v1_name = 'CapGemini'.
+
+write : / 'Name1' COLOR 1, v1_name COLOR 3.
+write : / 'Name2' COLOR 1, v2_name COLOR 3.
+write : / 'Name3' COLOR 1, v3_name COLOR 3.
+
+
+v1_name = 'cg'.
+write : / 'Name' COLOR 1, v1_name COLOR 3.
+
+
+PARAMETERS : p_name type c LENGTH 20,
+             p_pin  type n LENGTH 6.
+
+CONCATENATE p_name
+           'Banglore'
+           'DTP'
+            p_pin
+            into data(v_addrs)
+            SEPARATED BY ','.
+
+write : / 'v_addrs' COLOR 1, v_addrs COLOR 3.
+
+data v1_val type f value '34.26789'.
+write : / 'v1_val' COLOR 1, v1_val color 3.
+
+data v2_val type p DECIMALS 5 value '34.26789'.
+write : / 'v2_val' COLOR 1, v2_val color 3.
