@@ -1,0 +1,79 @@
+*&---------------------------------------------------------------------*
+*& Report Z_LOOP_TECHN
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT z_loop_techn.
+
+
+*without looping
+*
+*DATA v_count TYPE i.
+*
+*v_count = v_count + 1.
+*WRITE / v_count .
+*
+*v_count = v_count + 1.
+*WRITE / v_count .
+*
+*v_count = v_count + 1.
+*WRITE / v_count .
+*
+*v_count = v_count + 1.
+*WRITE / v_count .
+*
+*v_count = v_count + 1.
+*WRITE / v_count .
+*
+*ULINE.
+
+
+
+
+*printing odd numbers with do loop
+
+*v_count = 1.
+*DO 5 TIMES.
+*  v_count = v_count + 2.
+*  WRITE / v_count.
+*ENDDO.
+*
+*ULINE.
+
+
+
+*ABAP program that uses loops to display odd numbers from 1 to 20
+
+*DATA: oddno TYPE i.
+*
+*DO 20 TIMES.
+*  oddno = sy-index.
+*  IF oddno MOD 2 <> 0.
+*    WRITE: / oddno.
+*  ENDIF.
+*ENDDO.
+*
+*uline .
+
+
+
+*ABAP program that uses loops to display even numbers from 1 to 20:
+
+DATA : evennu TYPE i.
+
+DO 20 TIMES.
+  evennu = sy-index.
+  IF evennu MOD 2 = 0.
+    WRITE: / evennu.
+  ENDIF.
+ENDDO.
+
+
+*printing odd numbers using while loop
+*v_count = 1.
+*WHILE  v_count < 20 .
+*  v_count = v_count + 2.
+*  WRITE / v_count .
+*
+*
+*ENDWHILE.
