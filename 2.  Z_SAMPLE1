@@ -1,0 +1,80 @@
+*&---------------------------------------------------------------------*
+*& Report Z_PP_SAMPLE
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT z_pp_sample.
+*PERFORM func.
+*PERFORM prg.
+PERFORM program.
+*
+*PARAMETERS a TYPE i.
+*PARAMETERS b TYPE i.
+*DATA c TYPE i.
+*
+*FORM prg.
+*  c = a + b.
+*  WRITE / c.
+*ENDFORM.
+*
+*  DATA x TYPE i VALUE 100.
+*  DATA y TYPE i VALUE 300.
+*  DATA z TYPE i.
+*
+*FORM func.
+*  z = x + y .
+*  WRITE / z.
+*ENDFORM.
+
+PARAMETERS m TYPE i DEFAULT 100.
+PARAMETERS n TYPE i DEFAULT 200  OBLIGATORY.
+DATA o TYPE i.
+PARAMETERS p_opr TYPE c DEFAULT '+' .
+
+* c is character
+
+*FORM PROGRAM.
+*  if p_opr = '+'.
+*  O = M + N.
+*  WRITE / O .
+*
+*  ELSEIF p_opr = '-'.
+*    O = M - N.
+*    WRITE / O.
+*
+*  ELSEIF p_opr = '*'.
+*    O = M * N.
+*    WRITE / O.
+*
+*  ELSE .
+*    WRITE / 'INVALID OPERATOR'.
+*uline.
+* ENDIF.
+*ENDFORM.
+
+FORM program.
+  CASE p_opr.
+    WHEN '+' .
+      o = m + n.
+      WRITE 'Addition value is :'.
+      WRITE /  o .
+
+    WHEN '-'.
+      o = m - n.
+      WRITE 'Subtraction value is :'.
+      WRITE / o.
+
+    WHEN '*'.
+      o = m - n.
+      WRITE 'Multiplication value is :'.
+      WRITE / o.
+
+    WHEN '/'.
+      o = m / n.
+      WRITE 'Division value is :'.
+      WRITE / o.
+
+    WHEN OTHERS.
+      WRITE / 'INVALID OPERATOR'.
+  ENDCASE.
+ENDFORM.
