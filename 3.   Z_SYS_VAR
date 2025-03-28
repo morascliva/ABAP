@@ -1,0 +1,52 @@
+*&---------------------------------------------------------------------*
+*& Report Z_SYS_VAR
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT z_sys_var.
+
+WRITE / syst-datum .
+
+WRITE : /100 'Date' COLOR 1 ,120 syst-datum COLOR 7 .
+WRITE : /100 'Date' COLOR 1 , 120 syst-uzeit COLOR 7 .
+WRITE : /100 'User' COLOR 1 , 120 syst-uname COLOR 7 .
+ULINE.
+
+WRITE : /100 'Date' COLOR 1 ,120 sy-datum COLOR 7 .
+WRITE : /100 'Date' COLOR 1 , 120 sy-uzeit COLOR 7 .
+WRITE : /100 'User' COLOR 1 , 120 sy-uname COLOR 7 .
+
+
+*ALL THE SYSTEMS VARIABLES CAN BE CHECKED FROM A DB TABLE
+*/str SYST AND CAN BE CHECKED VIA CODE
+*
+WRITE  / 'List of sales orders ' COLOR 1 .
+
+DATA v_ord TYPE i.
+
+DO 10 TIMES.
+  v_ord =  v_ord + 1.
+  WRITE /  v_ord COLOR 1.
+ENDDO.
+ULINE.
+
+
+WRITE / sy-index COLOR 1.
+DO  5 TIMES.
+  WRITE / sy-index COLOR 3.
+ENDDO.
+WRITE /  sy-index  COLOR 1.
+WRITE / 'End of Prog' COLOR 7.
+
+
+PARAMETERS :  Name(25) TYPE c DEFAULT 'Capgemini',
+             dist     TYPE i.
+
+
+WRITE : / 'Name' COLOR 1, Name COLOR 5.
+WRITE : / 'Name' COLOR 1, Name COLOR 6 RIGHT-JUSTIFIED.
+WRITE : / 'Name' COLOR 1, Name COLOR 7 CENTERED.
+ULINE.
+WRITE : / 'Distance' COLOR 1, dist COLOR 5.
+WRITE : / 'Distance' COLOR 1, dist COLOR 6 LEFT-JUSTIFIED.
+WRITE : / 'Distance' COLOR 1, dist COLOR 7 CENTERED.
