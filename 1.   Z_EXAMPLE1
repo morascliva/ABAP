@@ -1,0 +1,48 @@
+*&---------------------------------------------------------------------*
+*& Report Z_PP_EXAMPLE
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT z_pp_example.
+
+WRITE 'This is the first ABAP sample program '.
+
+WRITE : '1','2','3','4','5'.
+
+* for repitative key words and new line
+
+WRITE /: 'Name:',
+         'Grade:',
+         'Age:',
+         'Number :',
+         'Gender:'.
+
+
+WRITE /: 'Name:' COLOR 1,
+         'Age:'  COLOR 2,
+         'Grade:' COLOR 3,
+         'Number :' COLOR 4,
+         'Gender:' COLOR 5 , "green
+         'Address:' COLOR 6,  "red
+         'Subject:' COLOR 7.
+
+ULINE.
+WRITE /: 'Name:' COLOR 1,
+         'Age:'  COLOR 2,
+         'Grade:' COLOR 3,
+         'Number :' COLOR 4,
+         'Gender:' COLOR 5 ,
+         'Address:' COLOR 6,
+         'Subject:' COLOR 7.
+
+DATA X TYPE I.
+
+WRITE / 'x' color 1.
+WRITE / x color 3.
+
+
+uline.
+WRITE / 'Hello' color : 1,2,3,4,5,6,7.
+
+
+*ZADM_VARIABLES
