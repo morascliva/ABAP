@@ -1,0 +1,33 @@
+PARAMETERS :p_name(25) TYPE c DEFAULT 'CAPGEMINI',
+            p_dist     TYPE i DEFAULT '90'.
+
+
+*sy-index is a system variable that holds the current iteration number of a loop.
+
+
+CONSTANTS c_pie TYPE f VALUE '3.14'.
+DO 3 TIMES .
+  WRITE / sy-index COLOR 5 .
+  WRITE / .
+  DO 5 TIMES .
+    WRITE sy-index COLOR 7.
+  ENDDO .
+ENDDO .
+ULINE .
+
+*c_pie = '3.14'.
+*The field "C_PIE" cannot be modified,
+*Even with same value
+
+*Non-Numerics are left  Aligned by default
+*Numerics     are Right Aligned by default
+*The default nature can be changed While Outout
+*BUT not While Input
+
+WRITE : / 'Name' COLOR 1, p_name COLOR 5.
+WRITE : / 'Name' COLOR 1, p_name COLOR 6 RIGHT-JUSTIFIED.
+WRITE : / 'Name' COLOR 1, p_name COLOR 7 CENTERED.
+ULINE.
+WRITE : / 'Distance' COLOR 1, p_dist COLOR 5.
+WRITE : / 'Distance' COLOR 1, p_dist COLOR 6 LEFT-JUSTIFIED.
+WRITE : / 'Distance' COLOR 1, p_dist COLOR 7 CENTERED.
