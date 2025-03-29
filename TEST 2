@@ -4,4 +4,19 @@
 *CONTINUE can be used only within loops ?
 *TRUE 
 
+*What is the maximum no of tables in which the same structure  can be included 
+*No Limit 
+
+*What is the maximum no of tables in which the same APPEND structure can be included ?
+*1
+
+*Which is the valid pair of Reference fields ?
+*Both QUAN,UNIT and CURR,CUKY
+
+*Which is True about ABAP ?
+*Both 4thGen Lang and is not case sensitive.
+
+*Maximum no of data base servers in R/3 architecture ?
+*1
+
 
