@@ -45,4 +45,35 @@ ENDIF.
 
 *Less than 3 
 
-*
+DO 10 TIMES .
+WRITE: 'sy-index' .
+ENDO .
+What will be the output?
+
+*text-'sy-index' 10 times
+
+*what will be the output by the code below?
+DATA:beta type i VALUE 300 ,
+alpha type i .
+WRITE : beta .
+WHILE beta > 200 .
+write : beta .
+beta =beta - 100 .
+ENDWHILE .
+
+*300 300 
+
+* What will be the output ?
+DO 10 times.
+IF SY-INDEX BETWEEN 6 AND 8 .
+CONTINUE .
+ENDIF.
+WRITE SY-INDEX.
+ENDNO.
+
+*1 2 3 4 5 9 10
+
+*What is maintained in Domain?
+*Data type ,Length
+
+
