@@ -71,6 +71,8 @@ ENDIF.
 WRITE SY-INDEX.
 ENDNO.
 
+
+*CONTINUE: If the condition is true, it skips the current iteration and moves to the next one.
 *1 2 3 4 5 9 10
 
 *What is maintained in Domain?
