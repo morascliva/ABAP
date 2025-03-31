@@ -21,3 +21,28 @@
 
 *Maximum no of data base servers in R/3 architecture ?
 *1
+
+*systen variable for loop index
+*sy-index
+
+*What is the keyword for making the input element mandatory ?
+*OBLIGATORY
+
+*Database table in se11 can be created without primary key ?
+*FALSE
+
+*What is the output of the below code ?
+DATA:a TYPE i VALUE 2.
+IF a > 5.
+WRITE :/ a, 'Greater Than' , 5.
+ELSEIF a > 4.
+WRITE:/ a, 'Greater Than' ,4.
+ELSEIF a > 3.
+WRITE: a, 'Greater Than' ,3.
+ELSE.
+WRITE : / a,'Less Than' ,3
+ENDIF.
+
+*Less than 3 
+
+*
