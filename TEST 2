@@ -96,3 +96,16 @@ ENDDO.
 *Data type ,Length
 
 
+
+DO 10 TIMES.
+  IF sy-index = 5.
+    EXIT.
+  ENDIF.
+  WRITE: / sy-index.
+ENDDO.
+Output:
+
+1
+2
+3
+4
