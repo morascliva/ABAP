@@ -109,3 +109,17 @@ Output:
 2
 3
 4
+
+
+DO 10 TIMES.
+  IF sy-index = 5.
+    BREAK.
+  ENDIF.
+  WRITE: / sy-index.
+ENDDO.
+Output:
+
+1
+2
+3
+4
