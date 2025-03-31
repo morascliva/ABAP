@@ -75,6 +75,23 @@ ENDNO.
 *CONTINUE: If the condition is true, it skips the current iteration and moves to the next one.
 *1 2 3 4 5 9 10
 
+
+
+DO 10 TIMES.
+  IF sy-index BETWEEN 3 AND 5.
+    CONTINUE.
+  ENDIF.
+  WRITE: / sy-index.
+ENDDO.
+
+1
+2
+6
+7
+8
+9
+10
+
 *What is maintained in Domain?
 *Data type ,Length
 
