@@ -1,0 +1,81 @@
+*&---------------------------------------------------------------------*
+*& Report ZAK12_ITABLE_OPERATIONS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_ITABLE_OPERATIONS.
+
+
+types : BEGIN OF ty_vbak,
+         vbeln type vbak-vbeln,   "Sales Doc no
+         kunnr type kunag,        "Sold-to Party
+         netwr type netwr_ak,     "Net Amount
+         prty  type c LENGTH 10,
+        END   OF ty_vbak.
+
+data : it_vbak type TABLE of ty_vbak,
+       wa_vbak type          ty_vbak.
+
+select
+         vbeln
+         kunnr
+         netwr
+from vbak
+into TABLE it_vbak
+UP TO 50 ROWS
+where netwr <> 0.
+
+write / 'It_vbak after After Selection' COLOR 3.
+uline.
+if it_vbak is not INITIAL.
+   LOOP AT it_vbak into wa_vbak.
+        write : / sy-tabix COLOR 1, wa_vbak-vbeln COLOR 2,
+                  wa_vbak-kunnr, wa_vbak-netwr COLOR 3, wa_vbak-prty COLOR 7.
+   ENDLOOP.
+else.
+  write / 'No Sales Data Found' COLOR 1.
+endif.
+*if it_vbak is not INITIAL.
+*   LOOP AT it_vbak into wa_vbak.
+*    if wa_vbak-netwr BETWEEN 1 and 1000. " wa_vbak-netwr >= 1 and wa_Vbak-netwr <= 1000
+*        wa_vbak-prty = 'Low'.
+*     ELSEIF wa_vbak-netwr BETWEEN 1001 and 10000.
+*        wa_vbak-prty = 'Meidum'.
+*     elseif  wa_vbak-netwr >  10000.
+*        wa_vbak-prty = 'High'.
+*     else.
+*       wa_vbak-prty = 'NA'.
+*    endif.
+*
+*    modify it_vbak index sy-tabix from wa_vbak TRANSPORTING prty .
+*                                  "where vbeln = wa_vbak-vbeln.
+*        write : / sy-tabix COLOR 1, wa_vbak-vbeln COLOR 2,
+*                  wa_vbak-kunnr, wa_vbak-netwr COLOR 3, wa_vbak-prty COLOR 7.
+*   ENDLOOP.
+*else.
+*  write / 'No Sales Data Found' COLOR 1.
+*endif.
+
+
+wa_vbak-prty = 'Low'.
+modify it_vbak from wa_vbak TRANSPORTING prty
+                                  where netwr BETWEEN 1 and 1000.
+
+wa_vbak-prty = 'Medium'.
+modify it_vbak from wa_vbak TRANSPORTING prty
+                                  where netwr BETWEEN 1001 and 10000.
+wa_vbak-prty = 'High'.
+modify it_vbak from wa_vbak TRANSPORTING prty
+                                  where netwr > 10000.
+ULINE.
+
+write / 'It_vbak after Modify prty' COLOR 3.
+uline.
+if it_vbak is not INITIAL.
+   LOOP AT it_vbak into wa_vbak.
+        write : / sy-tabix COLOR 1, wa_vbak-vbeln COLOR 2,
+                  wa_vbak-kunnr, wa_vbak-netwr COLOR 3, wa_vbak-prty COLOR 7.
+   ENDLOOP.
+else.
+  write / 'No Sales Data Found' COLOR 1.
+endif.
