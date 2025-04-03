@@ -1,0 +1,50 @@
+*&---------------------------------------------------------------------*
+*& Report ZAK12_CLASSIC_KNA1
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_CLASSIC_KNA1.
+
+
+*types : BEGIN OF ty_kna1,
+*          mandt type mandt,
+*          kunnr type kunnr,
+*          land1 type land1,
+*        END   OF ty_kna1.
+
+*
+*data it_kna1 type table of ty_kna1.
+*data wa_kna1 type          ty_kna1.
+
+*CLassic
+*select    mandt
+*          kunnr
+*          land1
+*from kna1
+*into TABLE it_kna1
+
+*if it_kna1 is not INITIAL.
+*  LOOP AT it_makt into wa_kna1.
+*     write : / sy-tabix COLOR 3, wa_kna1-mandt COLOR 1, wa_kna1-kunnr,wa_kna1-land1.
+*  ENDLOOP.
+*endif.
+
+*New Open SQL
+
+select    mandt,
+          kunnr,
+          land1
+from kna1
+into TABLE @data(it1_kna1)
+UP TO 10 ROWS  .
+
+write / 'it_makt using new Open SQL' COLOR 3.
+uline.
+if it1_kna1 is not INITIAL.
+  LOOP AT it1_kna1 into data(wa_kna1).
+     write : / sy-tabix COLOR 3, wa_kna1-mandt COLOR 1, wa_kna1-kunnr COLOR 4,
+     wa_kna1-land1 COLOR 6.
+  ENDLOOP.
+else.
+  write / 'No Materials Data' COLOR 1.
+endif.
