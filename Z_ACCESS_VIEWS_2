@@ -1,0 +1,23 @@
+*&---------------------------------------------------------------------*
+*& Report Z_ACCESS_VIEWS_2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT Z_ACCESS_VIEWS_2.
+
+data : it_sales type TABLE OF zadm_dbv,
+       wa_sales type          zadm_dbv.
+
+
+select * from zadm_dbv into TABLE it_sales.
+
+if it_sales is not INITIAL.
+   LOOP AT it_sales into wa_sales.
+     write : / sy-tabix COLOR 3,
+               wa_sales-kunnr, wa_sales-name1, wa_sales-land1,
+               wa_sales-vbeln COLOR 3, wa_sales-netwr COLOR 3.
+
+   ENDLOOP.
+else.
+  write / 'No Sales Data'  COLOR 1.
+endif.
