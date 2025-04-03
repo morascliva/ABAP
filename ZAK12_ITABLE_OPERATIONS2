@@ -1,0 +1,173 @@
+
+*&---------------------------------------------------------------------*
+*& Report ZAK12_ITABLE_OPERATIONS2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zak12_itable_operations2 LINE-SIZE 300.
+
+
+
+TYPES : BEGIN OF ty_emp,
+          eid   TYPE zadm_eid,
+          name1 TYPE name1_gp,
+          basic TYPE i,
+          hra   TYPE i,
+          allow TYPE i,
+          ded   TYPE i,
+          total TYPE i,
+          net   TYPE i,
+        END   OF ty_emp.
+
+DATA : it_emp TYPE TABLE OF ty_emp,
+       wa_emp TYPE          ty_emp.
+
+SELECT
+         eid
+         name1
+         basic
+         hra
+         allow
+         ded
+
+FROM zadm_emps
+
+  INTO TABLE it_emp.
+
+
+ULINE.
+IF it_emp IS NOT INITIAL.
+  LOOP AT it_emp INTO wa_emp.
+    WRITE : / sy-tabix COLOR 1, wa_emp-eid COLOR 2,
+              wa_emp-name1, wa_emp-basic COLOR 3, wa_emp-hra COLOR 7,wa_emp-allow COLOR 2,
+              wa_emp-ded COLOR 3 .
+  ENDLOOP.
+
+ELSE.
+  WRITE / 'No Data Found' COLOR 1.
+ENDIF.
+
+ULINE.
+
+LOOP AT it_emp INTO wa_emp.
+  wa_emp-total = wa_emp-basic + wa_emp-hra + wa_emp-allow + wa_emp-ded.
+  wa_emp-net = wa_emp-total - wa_emp-ded.
+
+  MODIFY  it_emp  INDEX sy-tabix FROM wa_emp TRANSPORTING total net .
+
+  WRITE : / sy-tabix COLOR 1, wa_emp-eid COLOR 2,
+                 wa_emp-name1, wa_emp-basic COLOR 3, wa_emp-hra COLOR 7,wa_emp-allow COLOR 2,
+                 wa_emp-ded COLOR 3 , wa_emp-total COLOR 5, wa_emp-net COLOR 4.
+
+ENDLOOP.
+
+* to download click pattern
+
+        CALL FUNCTION 'GUI_DOWNLOAD'
+          EXPORTING
+*           BIN_FILESIZE                    =
+            filename                        = 'c:\cliva\internaltable.txt'
+*           FILETYPE                        = 'ASC'
+*           APPEND                          = ' '
+           WRITE_FIELD_SEPARATOR           = 'T' "TAB
+*           HEADER                          = '00'
+*           TRUNC_TRAILING_BLANKS           = ' '
+*           WRITE_LF                        = 'X'
+*           COL_SELECT                      = ' '
+*           COL_SELECT_MASK                 = ' '
+*           DAT_MODE                        = ' '
+*           CONFIRM_OVERWRITE               = ' '
+*           NO_AUTH_CHECK                   = ' '
+*           CODEPAGE                        = ' '
+*           IGNORE_CERR                     = ABAP_TRUE
+*           REPLACEMENT                     = '#'
+*           WRITE_BOM                       = ' '
+*           TRUNC_TRAILING_BLANKS_EOL       = 'X'
+*           WK1_N_FORMAT                    = ' '
+*           WK1_N_SIZE                      = ' '
+*           WK1_T_FORMAT                    = ' '
+*           WK1_T_SIZE                      = ' '
+*           WRITE_LF_AFTER_LAST_LINE        = ABAP_TRUE
+*           SHOW_TRANSFER_STATUS            = ABAP_TRUE
+*           VIRUS_SCAN_PROFILE              = '/SCET/GUI_DOWNLOAD'
+*         IMPORTING
+*           FILELENGTH                      =
+          tables
+            data_tab                        = it_emp
+*           FIELDNAMES                      =
+*         EXCEPTIONS
+*           FILE_WRITE_ERROR                = 1
+*           NO_BATCH                        = 2
+*           GUI_REFUSE_FILETRANSFER         = 3
+*           INVALID_TYPE                    = 4
+*           NO_AUTHORITY                    = 5
+*           UNKNOWN_ERROR                   = 6
+*           HEADER_NOT_ALLOWED              = 7
+*           SEPARATOR_NOT_ALLOWED           = 8
+*           FILESIZE_NOT_ALLOWED            = 9
+*           HEADER_TOO_LONG                 = 10
+*           DP_ERROR_CREATE                 = 11
+*           DP_ERROR_SEND                   = 12
+*           DP_ERROR_WRITE                  = 13
+*           UNKNOWN_DP_ERROR                = 14
+*           ACCESS_DENIED                   = 15
+*           DP_OUT_OF_MEMORY                = 16
+*           DISK_FULL                       = 17
+*           DP_TIMEOUT                      = 18
+*           FILE_NOT_FOUND                  = 19
+*           DATAPROVIDER_EXCEPTION          = 20
+*           CONTROL_FLUSH_ERROR             = 21
+*           OTHERS                          = 22
+                  .
+
+
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+*if it_vbak is not INITIAL.
+*   LOOP AT it_vbak into wa_vbak.
+*    if wa_vbak-netwr BETWEEN 1 and 1000. " wa_vbak-netwr >= 1 and wa_Vbak-netwr <= 1000
+*        wa_vbak-prty = 'Low'.
+*     ELSEIF wa_vbak-netwr BETWEEN 1001 and 10000.
+*        wa_vbak-prty = 'Meidum'.
+*     elseif  wa_vbak-netwr >  10000.
+*        wa_vbak-prty = 'High'.
+*     else.
+*       wa_vbak-prty = 'NA'.
+*    endif.
+*
+*    modify it_vbak index sy-tabix from wa_vbak TRANSPORTING prty .
+*                                  "where vbeln = wa_vbak-vbeln.
+*        write : / sy-tabix COLOR 1, wa_vbak-vbeln COLOR 2,
+*                  wa_vbak-kunnr, wa_vbak-netwr COLOR 3, wa_vbak-prty COLOR 7.
+*   ENDLOOP.
+*else.
+*  write / 'No Sales Data Found' COLOR 1.
+*endif.
+
+
+*  wa_vbak-prty = 'Low'.
+*  MODIFY it_vbak FROM wa_vbak TRANSPORTING prty
+*                                    WHERE netwr BETWEEN 1 AND 1000.
+*
+*  wa_vbak-prty = 'Medium'.
+*  MODIFY it_vbak FROM wa_vbak TRANSPORTING prty
+*                                    WHERE netwr BETWEEN 1001 AND 10000.
+*  wa_vbak-prty = 'High'.
+*  MODIFY it_vbak FROM wa_vbak TRANSPORTING prty
+*                                    WHERE netwr > 10000.
+*  ULINE.
+*
+*  WRITE / 'It_vbak after Modify prty' COLOR 3.
+*  ULINE.
+*  IF it_vbak IS NOT INITIAL.
+*    LOOP AT it_vbak INTO wa_vbak.
+*      WRITE : / sy-tabix COLOR 1, wa_vbak-vbeln COLOR 2,
+*                wa_vbak-kunnr, wa_vbak-netwr COLOR 3, wa_vbak-prty COLOR 7.
+*    ENDLOOP.
+*  ELSE.
+*    WRITE / 'No Sales Data Found' COLOR 1.
+*  ENDIF.
+
+* modify should be in loop
