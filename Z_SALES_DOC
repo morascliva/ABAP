@@ -1,0 +1,53 @@
+*&---------------------------------------------------------------------*
+*& Report Z_SALES_DOC
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT Z_SALES_DOC.
+
+* write a program to display the below data from sales doc header table - VBAK
+
+
+DATA it_nos TYPE TABLE OF i .
+DATA it_vbeln TYPE TABLE OF vbeln .
+
+
+TYPES : BEGIN OF ty_vbak,
+          vbeln TYPE VBELN_VA,
+          VKORG TYPE VKORG,
+          ERDAT TYPE ERDAT,
+          kunnr TYPE KUNAG,
+          NETWR TYPE NETWR_AK,
+          WAERK TYPE WAERK,
+
+        END   OF ty_vbak.
+
+DATA it_vbak TYPE TABLE OF ty_vbak.
+data rec_vbak type ty_vbak.
+PARAMETERS p_vbeln TYPE VBELN_VA DEFAULT '1'.
+
+SELECT vbeln
+          VKORG
+          ERDAT
+          kunnr
+          NETWR
+          WAERK
+FROM vbak
+INTO TABLE it_vbak
+WHERE vbeln = p_vbeln.
+
+
+  if it_vbak is not INITIAL.
+
+LOOP AT it_vbak into rec_vbak.
+  write:/ sy-tabix,
+          rec_vbak-VKORG  COLOR 3,
+          rec_vbak-ERDAT COLOR 1,
+          rec_vbak-kunnr ,
+          rec_vbak-NETWR COLOR 7,
+          rec_vbak-WAERK COLOR 6.
+ENDLOOP.
+
+else.
+  write : / 'No order for this number ' COLOR 1 , p_vbeln COLOR 7 .
+  endif.
