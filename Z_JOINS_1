@@ -1,0 +1,36 @@
+*&---------------------------------------------------------------------*
+*& Report Z_JOINS_1
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT Z_JOINS_1.
+
+types : BEGIN OF ty_sales,
+          kunnr type kunnr,
+          name1 type name1_gp,
+          land1 type land1_gp,
+          vbeln type vbeln_va,
+          vkorg type vkorg,
+          netwr type netwr_ak,
+        END   OF ty_sales.
+data : it_sales type TABLE OF ty_sales,
+       wa_sales type          ty_sales.
+select kna1~kunnr
+       kna1~name1
+       kna1~land1
+       vbak~vbeln
+       vbak~vkorg
+       vbak~netwr
+from kna1 INNER JOIN vbak
+on   kna1~kunnr = vbak~kunnr
+into TABLE it_sales.
+
+if it_sales is not INITIAL.
+   LOOP AT it_sales into wa_sales.
+     write : / wa_sales-kunnr, wa_sales-name1, wa_sales-land1,
+               wa_sales-vbeln COLOR 3, wa_sales-vkorg, wa_sales-netwr COLOR 3.
+
+   ENDLOOP.
+else.
+  write / 'No Sales Data'  COLOR 1.
+endif.
