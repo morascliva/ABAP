@@ -1,0 +1,60 @@
+*&---------------------------------------------------------------------*
+*& Report ZAK12_CLASSIC
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zak12_classic.
+
+
+*types : BEGIN OF ty_makt,
+*          matnr type matnr,
+*          maktx type maktx,
+*          spras type spras,
+*        END   OF ty_makt.
+
+*
+*data it_makt type table of ty_makt.
+*data wa_makt type          ty_makt.
+
+
+
+
+*CLassic Open SQL and is space Separated
+*select    matnr
+*          maktx
+*          spras
+*from makt
+*into TABLE it_makt
+*where spras = sy-langu. "Login Language setting
+*
+*if it_makt is not INITIAL.
+*  sort it_makt by matnr ASCENDING.
+*  LOOP AT it_makt into wa_makt.
+*     write : / sy-tabix COLOR 3, wa_makt-matnr COLOR 1, wa_makt-maktx,wa_makt-spras.
+*  ENDLOOP.
+*else.
+*  write / 'No Materials Data' COLOR 1.
+*endif.
+
+
+
+*New Open SQL - COmma Separated - inline declaration
+*clear it_makt.
+select    matnr,
+          maktx,
+          spras
+from makt
+UP TO 10 ROWS
+into TABLE @data(it1_makt)
+where spras = @sy-langu.
+
+write / 'it_makt using new Open SQL' COLOR 3.
+uline.
+if it1_makt is not INITIAL.
+  sort it1_makt by matnr ASCENDING.
+  LOOP AT it1_makt into data(wa_makt).
+     write : / sy-tabix COLOR 3, wa_makt-matnr COLOR 1, wa_makt-maktx,wa_makt-spras.
+  ENDLOOP.
+else.
+  write / 'No Materials Data' COLOR 1.
+endif.
