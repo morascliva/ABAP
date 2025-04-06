@@ -1,0 +1,61 @@
+*&---------------------------------------------------------------------*
+*& Report ZAK12_SUBROUTINE_MAKT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_SUBROUTINE_MAKT.
+
+types : BEGIN OF ty_makt,
+          matnr type matnr,
+          maktx type maktx,
+          spras type spras,
+        END   OF ty_makt.
+
+
+data it_makt type table of ty_makt.
+data wa_makt type          ty_makt.
+
+
+
+PERFORM get_maktinformation.
+
+PERFORM get_print_materialinfo.
+
+
+
+*&---------------------------------------------------------------------*
+*& Form get_maktinformation
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_maktinformation .
+
+select    matnr
+          maktx
+          spras
+from makt
+into TABLE it_makt
+where spras = sy-langu. "Login Language setting
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form get_print_materialinfo
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_print_materialinfo .
+if it_makt is not INITIAL.
+  sort it_makt by matnr ASCENDING.
+  LOOP AT it_makt into wa_makt.
+     write : / sy-tabix COLOR 3, wa_makt-matnr COLOR 1, wa_makt-maktx,wa_makt-spras.
+  ENDLOOP.
+else.
+  write / 'No Materials Data' COLOR 1.
+endif.
+ENDFORM.
