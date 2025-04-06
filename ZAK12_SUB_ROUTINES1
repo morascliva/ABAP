@@ -1,0 +1,72 @@
+*&---------------------------------------------------------------------*
+*& Report ZADM_PROCESS_CUSTOMERS
+*&---------------------------------------------------------------------*
+
+REPORT ZAK12_SUB_ROUTINES1.
+
+data it_nos type TABLE OF i . "it_nos here is an itab of Integers
+
+data it_kunnr type TABLE OF kunnr . "it_kunnr here is an itab of Kunnr(Customer Nos)
+
+*data it_kna1 type TABLE OF kna1.
+  "Here it_kna1 is an Itab with all fields from DB table KNA1
+
+*Define Str data type
+types : BEGIN OF ty_kna1,
+           kunnr type kunnr,
+           land1 type land1_gp,
+           name1 type name1_gp,
+           ort01 type ort01_gp,
+        END   OF ty_kna1.
+data it_kna1  type TABLE OF ty_kna1."variable for multiple recs of the same type known as ITAB
+data wa_kna1 type          ty_kna1. "Variable for Single rec is known as Work area
+
+PARAMETERS p_land1 type land1_gp DEFAULT 'IN'.
+
+
+*OPen SQL is Space separated between columns
+PERFORM get_customers_by_ctry.
+
+uline.
+PERFORM display_customers.
+
+uline.
+
+*&---------------------------------------------------------------------*
+*& Form get_customers_by_ctry
+*&---------------------------------------------------------------------*
+FORM get_customers_by_ctry .
+select kunnr
+       land1
+       name1
+       ort01
+from kna1
+into TABLE it_kna1
+where land1 = p_land1.
+
+ENDFORM.
+
+*&---------------------------------------------------------------------*
+*& Form display_customers
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM display_customers .
+if it_kna1 is not INITIAL. "Not Empty
+
+*Displaying Data from ITAB is always record by record
+LOOP AT it_kna1 into wa_kna1.  "Starts 1st rec .. so on .. till last rec
+  write : / sy-tabix, "current rec's index from itab
+            wa_kna1-kunnr COLOR 3,
+            wa_kna1-name1 COLOR 1,
+            wa_kna1-ort01,
+            wa_kna1-land1 COLOR 7.
+ENDLOOP.
+
+else.
+  write : / 'No Customers for the given Ctry' COLOR 1, p_land1 color 7.
+endif.
+ENDFORM.
