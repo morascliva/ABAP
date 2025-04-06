@@ -1,0 +1,52 @@
+*&---------------------------------------------------------------------*
+*& Report ZAK12_SUB_ROUTINEOP3
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_SUB_ROUTINEOP3.
+
+data v1_res type i.
+data v2_res type i.
+
+
+PARAMETERS a type i.
+PARAMETERS b type i.
+PARAMETERS opr type c .
+
+PERFORM adds_any_two_ints USING a b opr
+                          CHANGING v1_res.
+*write : / 'addition of 1000,4000 is' COLOR 1, v1_res COLOR 3.
+uline.
+
+
+
+form adds_any_two_ints USING x type i
+                             y type i
+                             p_opr type c
+                       CHANGING res type i.
+
+ CASE p_opr.
+    WHEN '+' .
+      res = x + y.
+      WRITE 'Addition value is :'.
+      WRITE /  res .
+
+    WHEN '-'.
+      res = x - y.
+      WRITE 'Subtraction value is :'.
+      WRITE / res.
+
+    WHEN '*'.
+      res = x * y.
+      WRITE 'Multiplication value is :'.
+      WRITE / res.
+
+    WHEN '/'.
+      res = x / y.
+      WRITE 'Division value is :'.
+      WRITE / res.
+
+    WHEN OTHERS.
+      WRITE / 'INVALID OPERATOR'.
+  ENDCASE.
+endform.
