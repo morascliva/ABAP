@@ -1,0 +1,65 @@
+*&---------------------------------------------------------------------*
+*& Report ZAK12_SUB_ROUTINEOP4
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_SUB_ROUTINEOP4.
+
+
+*&---------------------------------------------------------------------*
+
+
+data v1_res type i.
+data v2_res type i.
+
+
+
+
+PERFORM two_ints USING 100 300 '+'
+                          CHANGING v1_res.
+uline.
+
+PERFORM two_ints USING 100 300 '-'
+                          CHANGING v1_res.
+uline.
+
+PERFORM two_ints USING 100 300 '*'
+                          CHANGING v1_res.
+uline.
+
+PERFORM two_ints USING 100 300 '/'
+                          CHANGING v1_res.
+uline.
+
+
+
+form two_ints USING x type i
+                             y type i
+                             p_opr type c
+                       CHANGING res type i.
+
+ CASE p_opr.
+    WHEN '+' .
+      res = x + y.
+      WRITE 'Addition value is :'.
+      WRITE /  res .
+
+    WHEN '-'.
+      res = x - y.
+      WRITE 'Subtraction value is :'.
+      WRITE / res.
+
+    WHEN '*'.
+      res = x * y.
+      WRITE 'Multiplication value is :'.
+      WRITE / res.
+
+    WHEN '/'.
+      res = x / y.
+      WRITE 'Division value is :'.
+      WRITE / res.
+
+    WHEN OTHERS.
+      WRITE / 'INVALID OPERATOR'.
+  ENDCASE.
+endform.
