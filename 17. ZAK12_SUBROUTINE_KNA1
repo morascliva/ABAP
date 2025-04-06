@@ -1,0 +1,58 @@
+*&---------------------------------------------------------------------*
+*& Report ZAK12_SUBROUTINE_KNA1
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_SUBROUTINE_KNA1.
+
+
+types : BEGIN OF ty_kna1,
+          mandt type mandt,
+          kunnr type kunnr,
+          land1 type land1,
+        END   OF ty_kna1.
+
+
+data it_kna1 type table of ty_kna1.
+data wa_kna1 type          ty_kna1.
+
+
+PERFORM get_kna1customer_info.
+PERFORM get_print_kna1info.
+
+*if it_kna1 is not INITIAL.
+*  LOOP AT it_makt into wa_kna1.
+*     write : / sy-tabix COLOR 3, wa_kna1-mandt COLOR 1, wa_kna1-kunnr,wa_kna1-land1.
+*  ENDLOOP.
+*endif.
+*&---------------------------------------------------------------------*
+*& Form get_customer_info
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_kna1customer_info .
+
+select    mandt
+          kunnr
+          land1
+from kna1
+into TABLE it_kna1.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form print_info
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_print_kna1info .
+if it_kna1 is not INITIAL.
+  LOOP AT it_kna1 into wa_kna1.
+     write : / sy-tabix COLOR 3, wa_kna1-mandt COLOR 1, wa_kna1-kunnr,wa_kna1-land1.
+  ENDLOOP.
+endif.
+ENDFORM.
