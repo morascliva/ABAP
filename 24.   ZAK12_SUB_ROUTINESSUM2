@@ -1,0 +1,31 @@
+*&---------------------------------------------------------------------*
+*& Report ZADM_SUB_ROUTINES2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_SUB_ROUTINESSUM2.
+data v1_res type i.
+data v2_res type i.
+data v3_res type i.
+
+PERFORM adds_any_two_ints USING 1000 4000 5000
+                          CHANGING v1_res.
+write : / 'addition of 1000,4000,5000 is' COLOR 1, v1_res COLOR 3.
+
+PERFORM adds_any_two_ints USING 1122 2233 3456
+                          CHANGING v2_res.
+
+write : / 'addition of 1122,2233,3456 is' COLOR 1, v2_res COLOR 7.
+
+write / v1_res COLOR 7.
+write / v2_res COLOR 7.
+
+
+form adds_any_two_ints USING x type i
+                             y type i
+                             z type i
+                       CHANGING res type i.
+
+  res = x + y + z.
+
+endform.
