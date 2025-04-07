@@ -1,0 +1,25 @@
+
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     REFERENCE(CURR_KEY) TYPE  WAERK
+*"  EXPORTING
+*"     REFERENCE(IT_VBAK) TYPE  ZAK12_TT_SALES
+*"----------------------------------------------------------------------
+
+FUNCTION ZAK12_GET_SALES.
+
+
+select vbeln,
+       vkorg,
+       kunnr,
+       netwr,
+       waerk
+
+from vbak
+into TABLE @it_vbak
+where waerk   = @curr_key.
+
+
+
+ENDFUNCTION.
