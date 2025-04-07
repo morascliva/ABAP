@@ -1,0 +1,115 @@
+
+*&---------------------------------------------------------------------*
+*& Report ZAK12_GET_VENDORS_FUNCTIONCALL
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_GET_VENDORS_FUNCTIONCA1.
+
+
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME.
+  PARAMETERS p_land1 type land1_gp. " land1_gp is datatype name for land1
+SELECTION-SCREEN END OF BLOCK b1.
+
+DATA it_lfa1 type  ZS23_AK8_TT_CRKY_LFA1.   " no need with TABLE OF here and TABLE TYPE name
+DATA wa_lfa1 type         ZS23_AK8_STR_CRKY_LFA1.
+
+
+CALL FUNCTION 'ZAK12_GET_VENDORS22'
+  EXPORTING
+    ctry_key       =  ctry_1
+ IMPORTING
+   IT_KNA1        =
+          .
+
+
+
+
+
+  SELECTION-SCREEN begin of BLOCK b1 WITH FRAME.
+PARAMETERS :cb_disp RADIOBUTTON GROUP g1,
+            cb_file RADIOBUTTON GROUP g1.
+SELECTION-SCREEN end of BLOCK b1.
+
+
+uline.
+if cb_disp = 'X'.
+    write / 'Data Displayed' COLOR 3.
+
+    LOOP AT it_kna1 into wa_kna1.
+        write : / sy-tabix COLOR 1,
+                  wa_kna1-lifnr COLOR 5,
+                  wa_kna1-NAME1 COLOR 5,
+                  wa_kna1-ort01 COLOR 7,
+                  wa_kna1-land1 COLOR 4.
+  ENDLOOP.
+endif.
+
+if cb_file = 'X'.
+    write / 'Data Downloaded' COLOR 3.
+endif.
+
+if cb_file = ''.
+    write / 'Nothing Selected' COLOR 3.
+endif.
+
+
+CALL FUNCTION 'GUI_DOWNLOAD'
+  EXPORTING
+*   BIN_FILESIZE                    =
+    filename                        ='C:\cliva\vendors.txt'
+*   FILETYPE                        = 'ASC'
+*   APPEND                          = ' '
+   WRITE_FIELD_SEPARATOR           = 'T'
+*   HEADER                          = '00'
+*   TRUNC_TRAILING_BLANKS           = ' '
+*   WRITE_LF                        = 'X'
+*   COL_SELECT                      = ' '
+*   COL_SELECT_MASK                 = ' '
+*   DAT_MODE                        = ' '
+*   CONFIRM_OVERWRITE               = ' '
+*   NO_AUTH_CHECK                   = ' '
+*   CODEPAGE                        = ' '
+*   IGNORE_CERR                     = ABAP_TRUE
+*   REPLACEMENT                     = '#'
+*   WRITE_BOM                       = ' '
+*   TRUNC_TRAILING_BLANKS_EOL       = 'X'
+*   WK1_N_FORMAT                    = ' '
+*   WK1_N_SIZE                      = ' '
+*   WK1_T_FORMAT                    = ' '
+*   WK1_T_SIZE                      = ' '
+*   WRITE_LF_AFTER_LAST_LINE        = ABAP_TRUE
+*   SHOW_TRANSFER_STATUS            = ABAP_TRUE
+*   VIRUS_SCAN_PROFILE              = '/SCET/GUI_DOWNLOAD'
+* IMPORTING
+*   FILELENGTH                      =
+  tables
+    data_tab                        = it_kna1
+*   FIELDNAMES                      =
+* EXCEPTIONS
+*   FILE_WRITE_ERROR                = 1
+*   NO_BATCH                        = 2
+*   GUI_REFUSE_FILETRANSFER         = 3
+*   INVALID_TYPE                    = 4
+*   NO_AUTHORITY                    = 5
+*   UNKNOWN_ERROR                   = 6
+*   HEADER_NOT_ALLOWED              = 7
+*   SEPARATOR_NOT_ALLOWED           = 8
+*   FILESIZE_NOT_ALLOWED            = 9
+*   HEADER_TOO_LONG                 = 10
+*   DP_ERROR_CREATE                 = 11
+*   DP_ERROR_SEND                   = 12
+*   DP_ERROR_WRITE                  = 13
+*   UNKNOWN_DP_ERROR                = 14
+*   ACCESS_DENIED                   = 15
+*   DP_OUT_OF_MEMORY                = 16
+*   DISK_FULL                       = 17
+*   DP_TIMEOUT                      = 18
+*   FILE_NOT_FOUND                  = 19
+*   DATAPROVIDER_EXCEPTION          = 20
+*   CONTROL_FLUSH_ERROR             = 21
+*   OTHERS                          = 22
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
