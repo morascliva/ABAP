@@ -1,0 +1,25 @@
+*&---------------------------------------------------------------------*
+*& Report ZADM_SEL_OPTIONS_IN_DETS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_SEL_OPTIONS_IN_DETS.
+
+data v_vbeln type vbeln_va.
+
+SELECT-OPTIONS : s_vbeln for v_vbeln,
+                 s1_vbeln for v_vbeln no-EXTENSION,
+                 s2_vbeln for v_vbeln no INTERVALS,
+                 s3_vbeln for v_vbeln no INTERVALS no-EXTENSION.
+
+*With the name of Select-options, an Itab with header line is
+*declared ,Each Input value/range is collected as a record into the
+*ITAB with pre-defined structure
+
+* SIGN  OPTION  LOW      HIGH
+*  I      BT      1        10
+*  I       EQ     15
+*  E       EQ      8
+LOOP AT s_vbeln.
+write : / s_vbeln-sign,s_vbeln-option,s_vbeln-low,s_vbeln-high.
+ENDLOOP.
