@@ -1,0 +1,12 @@
+FUNCTION ZAK12_TO_LOWER_CASE.
+*"--------------------------------------------------------------------
+*"*"Local Interface:
+*"  CHANGING
+*"     REFERENCE(STR) TYPE  STRING
+*"--------------------------------------------------------------------
+
+
+TRANSLATE str to LOWER CASE .
+
+
+ENDFUNCTION.
