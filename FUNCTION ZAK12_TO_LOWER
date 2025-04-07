@@ -1,0 +1,14 @@
+FUNCTION ZAK12_TO_LOWER.
+*"--------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     REFERENCE(STR1) TYPE  STRING
+*"  EXPORTING
+*"     REFERENCE(STR2) TYPE  STRING
+*"--------------------------------------------------------------------
+
+str2 = str1 .
+TRANSLATE str2 to LOWER CASE .
+
+
+ENDFUNCTION.
