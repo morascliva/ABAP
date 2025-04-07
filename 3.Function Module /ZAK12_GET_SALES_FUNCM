@@ -1,0 +1,118 @@
+*&---------------------------------------------------------------------*
+*& Report ZAK12_GET_SALES_FUNCM
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_GET_SALES_FUNCM.
+
+
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME.
+  PARAMETERS p_curr type waerk. " land1_gp is datatype name for land1
+
+SELECTION-SCREEN END OF BLOCK b1.
+
+DATA it_vbak type  ZAK12_TT_SALES.   " no need with TABLE OF here and TABLE TYPE name
+DATA wa_vbak type  ZAK12_STR_SALES.
+
+
+
+CALL FUNCTION 'ZAK12_GET_SALES'
+  EXPORTING
+    curr_key       = p_curr
+ IMPORTING
+      IT_VBAK        = it_vbak
+          .
+
+
+
+
+
+  SELECTION-SCREEN begin of BLOCK b2 WITH FRAME.
+PARAMETERS :cb_disp RADIOBUTTON GROUP g1,
+            cb_file RADIOBUTTON GROUP g1.
+SELECTION-SCREEN end of BLOCK b2.
+
+
+uline.
+if cb_disp = 'X'.
+    write / 'Data Displayed' COLOR 3.
+
+    LOOP AT it_vbak into wa_vbak.
+       write : / sy-tabix COLOR 1,
+                  wa_vbak-vbeln COLOR 5,
+                  wa_vbak-vkorg COLOR 5,
+                  wa_vbak-kunnr COLOR 7,
+                  wa_vbak-netwr COLOR 4,
+                  wa_vbak-weark COLOR 7.
+  ENDLOOP.
+endif.
+
+if cb_file = 'X'.
+    write / 'Data Downloaded' COLOR 3.
+endif.
+
+
+
+CALL FUNCTION 'GUI_DOWNLOAD'
+  EXPORTING
+*   BIN_FILESIZE                    =
+    filename                        = 'C:\cliva\sales.txt'
+*   FILETYPE                        = 'ASC'
+*   APPEND                          = ' '
+   WRITE_FIELD_SEPARATOR           = 'T'
+*   HEADER                          = '00'
+*   TRUNC_TRAILING_BLANKS           = ' '
+*   WRITE_LF                        = 'X'
+*   COL_SELECT                      = ' '
+*   COL_SELECT_MASK                 = ' '
+*   DAT_MODE                        = ' '
+*   CONFIRM_OVERWRITE               = ' '
+*   NO_AUTH_CHECK                   = ' '
+*   CODEPAGE                        = ' '
+*   IGNORE_CERR                     = ABAP_TRUE
+*   REPLACEMENT                     = '#'
+*   WRITE_BOM                       = ' '
+*   TRUNC_TRAILING_BLANKS_EOL       = 'X'
+*   WK1_N_FORMAT                    = ' '
+*   WK1_N_SIZE                      = ' '
+*   WK1_T_FORMAT                    = ' '
+*   WK1_T_SIZE                      = ' '
+*   WRITE_LF_AFTER_LAST_LINE        = ABAP_TRUE
+*   SHOW_TRANSFER_STATUS            = ABAP_TRUE
+*   VIRUS_SCAN_PROFILE              = '/SCET/GUI_DOWNLOAD'
+* IMPORTING
+*   FILELENGTH                      =
+  tables
+    data_tab                        = it_vbak
+*   FIELDNAMES                      =
+* EXCEPTIONS
+*   FILE_WRITE_ERROR                = 1
+*   NO_BATCH                        = 2
+*   GUI_REFUSE_FILETRANSFER         = 3
+*   INVALID_TYPE                    = 4
+*   NO_AUTHORITY                    = 5
+*   UNKNOWN_ERROR                   = 6
+*   HEADER_NOT_ALLOWED              = 7
+*   SEPARATOR_NOT_ALLOWED           = 8
+*   FILESIZE_NOT_ALLOWED            = 9
+*   HEADER_TOO_LONG                 = 10
+*   DP_ERROR_CREATE                 = 11
+*   DP_ERROR_SEND                   = 12
+*   DP_ERROR_WRITE                  = 13
+*   UNKNOWN_DP_ERROR                = 14
+*   ACCESS_DENIED                   = 15
+*   DP_OUT_OF_MEMORY                = 16
+*   DISK_FULL                       = 17
+*   DP_TIMEOUT                      = 18
+*   FILE_NOT_FOUND                  = 19
+*   DATAPROVIDER_EXCEPTION          = 20
+*   CONTROL_FLUSH_ERROR             = 21
+*   OTHERS                          = 22
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+if cb_file = ''.
+    write / 'Nothing Selected' COLOR 3.
+endif.
