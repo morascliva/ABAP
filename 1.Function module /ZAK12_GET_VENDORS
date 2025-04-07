@@ -1,0 +1,21 @@
+FUNCTION ZAK12_GET_VENDORS.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     REFERENCE(CTRY_KEY) TYPE  LAND1_GP
+*"  TABLES
+*"      IT_VEN STRUCTURE  ZAK12_STR_VENDORS
+*"----------------------------------------------------------------------
+
+
+
+select lifnr,
+       name1,
+       ort01,
+       land1
+
+from lfa1
+into TABLE @it_ven
+where land1 = @ctry_key.
+
+ENDFUNCTION.
