@@ -1,0 +1,56 @@
+*&---------------------------------------------------------------------*
+*& Report ZAK12_DB_CHANGING_OPRS2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_DB_CHANGING_OPRS2.
+
+*ZAK12_PRACTISE
+
+ data : wa_prac type ZAK12_PRACTISE,
+        it_prac type TABLE of ZAK12_PRACTISE.
+
+  clear wa_prac.
+        wa_prac-lifnr = 'CG001'.
+        wa_prac-name1 = 'Cap Gemini 1 Pvt Ltd'.
+        wa_prac-name2 = 'IN'.
+ append wa_prac to it_prac.
+
+ insert ZAK12_PRACTISE from wa_prac.
+
+
+   clear wa_prac.
+        wa_prac-lifnr = 'CG002'.
+        wa_prac-name1 = 'Cap Gemini 1 Pvt Ltd'.
+        wa_prac-name2 = 'JP'.
+ append wa_prac to it_prac.
+
+ insert ZAK12_PRACTISE from wa_prac.
+
+
+   clear wa_prac.
+        wa_prac-lifnr = 'CG003'.
+        wa_prac-name1 = 'Cap Gemini 1 Pvt Ltd'.
+        wa_prac-name2 = 'DE'.
+ append wa_prac to it_prac.
+
+ insert ZAK12_PRACTISE from wa_prac.
+   write : / 'No of records inserted Successfully' COLOR 1,
+             sy-dbcnt COLOR 3.
+
+
+ clear wa_prac.
+        wa_prac-lifnr = 'CG003'.
+        wa_prac-name1 = 'Cap Gemini 1 Pvt Ltd'.
+        wa_prac-name2 = 'DE'.
+ append wa_prac to it_prac.
+
+ insert ZAK12_PRACTISE from wa_prac.
+
+
+* when adding duplicates there will be no error but it wont insert duplicates
+*so we have to use accepting duplicates
+
+   insert ZAK12_PRACTISE from table it_prac ACCEPTING DUPLICATE KEYS.
+  write : / 'No of records inserted Successfully from it_prac' COLOR 1,
+             sy-dbcnt COLOR 3.
