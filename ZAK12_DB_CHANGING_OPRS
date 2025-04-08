@@ -1,0 +1,61 @@
+*&---------------------------------------------------------------------*
+*& Report ZADM_DB_CHANGING_OPRS
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_DB_CHANGING_OPRS.
+
+*types : BEGIN OF ty_kna1,
+*          kunnr type kunnr,
+*          land1 type land1_gp,
+*          name1 type name1_gp,
+*        END   OF ty_kna1.
+
+* data wa_kna1 type ty_kna1.
+*   The work area "WA_KNA1" is not long enough.
+PARAMETERS p_ort01 type ort01_gp.
+
+ data : wa_kna1 type kna1,
+        it_kna1 type TABLE of kna1.
+
+  clear wa_kna1.
+        wa_kna1-kunnr = 'CG01'.
+        wa_kna1-name1 = 'Cap Gemini 1 Pvt Ltd'.
+        wa_kna1-land1 = 'IN'.
+ append wa_kna1 to it_kna1.
+
+ insert kna1 from wa_kna1.
+   write : / 'No of records inserted Successfully' COLOR 1,
+             sy-dbcnt COLOR 3.
+
+  clear wa_kna1.
+        wa_kna1-kunnr = 'CG02'.
+        wa_kna1-name1 = 'Cap Gemini 2 Ltd'.
+        wa_kna1-land1 = 'IN'.
+append wa_kna1 to it_kna1.
+
+  clear wa_kna1.
+        wa_kna1-kunnr = 'CG03'.
+        wa_kna1-name1 = 'Cap Gemini 3 Ltd'.
+        wa_kna1-land1 = 'IN'.
+append wa_kna1 to it_kna1.
+
+ clear wa_kna1.
+        wa_kna1-kunnr = 'CG04'.
+        wa_kna1-name1 = 'Cap Gemini 4 Ltd'.
+        wa_kna1-land1 = 'IN'.
+append wa_kna1 to it_kna1.
+
+insert kna1 from table it_kna1 ACCEPTING DUPLICATE KEYS.
+  write : / 'No of records inserted Successfully from it_kna1' COLOR 1,
+             sy-dbcnt COLOR 3.
+
+  UPDATE kna1 set ort01 = p_ort01
+                where kunnr in ( 'CG01' , 'CG02' , 'CG04', 'CG03' ).
+    write : / 'No of records Updated Successfully ' COLOR 1,
+             sy-dbcnt COLOR 3.
+
+    delete from kna1 where kunnr in ( 'CG01' , 'CG02' , 'CG03', 'CG04' ).
+
+        write : / 'No of records Deleted Successfully ' COLOR 1,
+             sy-dbcnt COLOR 3.
