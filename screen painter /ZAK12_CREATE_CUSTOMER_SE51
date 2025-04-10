@@ -1,0 +1,34 @@
+*&---------------------------------------------------------------------*
+*& Report ZADM_CREATE_CUSTOMER_SE51
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_CREATE_CUSTOMER_SE51.
+tables kna1.
+call SCREEN 8999 .
+
+
+INCLUDE zak12_create_customer_se51_i01.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_8999  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_8999 INPUT.
+
+CASE sy-ucomm.
+  WHEN 'CRET'.
+    select SINGLE kunnr into @data(lv_kunnr)
+           from kna1 where kunnr = @kna1-kunnr.
+   if sy-subrc = 0.
+      MESSAGE 'Customer Already Exist' type 'I'.
+
+   else.
+     call SCREEN 9000.
+   ENDIF.
+  WHEN 'B2'.
+    leave TO SCREEN 0.
+  WHEN OTHERS.
+ENDCASE.
+
+ENDMODULE.
