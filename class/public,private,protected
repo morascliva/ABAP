@@ -1,0 +1,3 @@
+Public Members: public_var and public_method can be accessed from anywhere.
+Protected Members: protected_var and protected_method can be accessed within lcl_example and its subclasses.
+Private Members: private_var and private_method can only be accessed within lcl_example.
