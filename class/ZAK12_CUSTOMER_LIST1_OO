@@ -1,0 +1,67 @@
+*&---------------------------------------------------------------------*
+*& Report ZAK12_CUSTOMER_LIST1_OO
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_CUSTOMER_LIST1_OO.
+
+
+class lcl_customers DEFINITION.
+
+PUBLIC SECTION.
+ class-methods : get,
+           display.
+
+ PROTECTED SECTION.
+
+ PRIVATE SECTION.
+
+TYPES : BEGIN OF ty_lfa1,
+          lifnr TYPE lifnr,
+          land1 TYPE land1_gp,
+          name1 TYPE name1_gp,
+          ort01 TYPE ort01_gp,
+        END OF   ty_lfa1.
+
+class-DATA : it_lfa1 TYPE TABLE OF ty_lfa1,
+             wa_lfa1  TYPE          ty_lfa1.
+
+
+ENDCLASS.
+
+class lcl_customers IMPLEMENTATION.
+  method get.
+
+  SELECT lifnr
+         land1
+         name1
+         ort01
+  FROM kna1
+  INTO TABLE it_lfa1.
+
+endmethod.
+
+method display.
+
+  IF it_lfa1 IS NOT INITIAL. " Not Empty
+
+    LOOP AT it_lfa1 INTO wa_lfa1.
+      WRITE : / sy-tabix COLOR 7,
+                wa_lfa1-lifnr COLOR 5,wa_lfa1-name1 COLOR 4, wa_lfa1-ort01 COLOR 7, wa_lfa1-land1 COLOR 6.
+    ENDLOOP.
+
+  ELSE.
+    WRITE : / 'No Customers ' COLOR 1.
+  ENDIF.
+
+endmethod.
+
+ENDCLASS.
+
+START-OF-SELECTION.
+call METHOD lcl_customers=>get.
+
+call METHOD lcl_customers=>display.
+
+*clear lcl_customers=>wa_kna1.
+*   Access to private attribute "WA_KNA1" is not allowed.
