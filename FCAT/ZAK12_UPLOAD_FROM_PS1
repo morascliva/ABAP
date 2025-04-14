@@ -1,0 +1,137 @@
+*&---------------------------------------------------------------------*
+
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_UPLOAD_FROM_PS1.
+types : BEGIN OF ty_kna1,
+         kunnr type kunnr,
+         name1 type name1_gp,
+         ort01 type ort01_gp,
+         land1 type land1_gp,
+
+        END   OF ty_kna1.
+types : BEGIN OF ty_file,
+          text type string,
+        END   OF ty_file.
+data : wa_file type ty_file,
+       it_file type TABLE OF ty_file,
+       wa_kna1 type ty_kna1,
+       it_kna1 type TABLE OF ty_kna1.
+
+START-OF-SELECTION.
+
+CALL FUNCTION 'GUI_UPLOAD'
+  EXPORTING
+    filename                      ='C:\cliva\Customers.txt'
+*   FILETYPE                      = 'ASC'
+*   HAS_FIELD_SEPARATOR           = ' '
+*   HEADER_LENGTH                 = 0
+*   READ_BY_LINE                  = 'X'
+*   DAT_MODE                      = ' '
+*   CODEPAGE                      = ' '
+*   IGNORE_CERR                   = ABAP_TRUE
+*   REPLACEMENT                   = '#'
+*   CHECK_BOM                     = ' '
+*   VIRUS_SCAN_PROFILE            =
+*   NO_AUTH_CHECK                 = ' '
+* IMPORTING
+*   FILELENGTH                    =
+*   HEADER                        =
+  tables
+    data_tab                      = it_file
+* CHANGING
+*   ISSCANPERFORMED               = ' '
+* EXCEPTIONS
+*   FILE_OPEN_ERROR               = 1
+*   FILE_READ_ERROR               = 2
+*   NO_BATCH                      = 3
+*   GUI_REFUSE_FILETRANSFER       = 4
+*   INVALID_TYPE                  = 5
+*   NO_AUTHORITY                  = 6
+*   UNKNOWN_ERROR                 = 7
+*   BAD_DATA_FORMAT               = 8
+*   HEADER_NOT_ALLOWED            = 9
+*   SEPARATOR_NOT_ALLOWED         = 10
+*   HEADER_TOO_LONG               = 11
+*   UNKNOWN_DP_ERROR              = 12
+*   ACCESS_DENIED                 = 13
+*   DP_OUT_OF_MEMORY              = 14
+*   DISK_FULL                     = 15
+*   DP_TIMEOUT                    = 16
+*   OTHERS                        = 17
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+
+LOOP AT it_file into wa_file.
+
+  SPLIT wa_file-text at ',' into wa_kna1-kunnr
+                                 wa_kna1-name1
+                                 wa_kna1-ort01
+                                 wa_kna1-land1.
+
+
+ APPEND wa_kna1 to it_kna1.
+
+
+ENDLOOP.
+
+CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+ EXPORTING
+*   I_INTERFACE_CHECK                 = ' '
+*   I_BYPASSING_BUFFER                = ' '
+*   I_BUFFER_ACTIVE                   = ' '
+*   I_CALLBACK_PROGRAM                = ' '
+*   I_CALLBACK_PF_STATUS_SET          = ' '
+*   I_CALLBACK_USER_COMMAND           = ' '
+*   I_CALLBACK_TOP_OF_PAGE            = ' '
+*   I_CALLBACK_HTML_TOP_OF_PAGE       = ' '
+*   I_CALLBACK_HTML_END_OF_LIST       = ' '
+  I_STRUCTURE_NAME                  = 'ZAK12_STR_KNA1'
+*   I_BACKGROUND_ID                   = ' '
+*   I_GRID_TITLE                      =
+*   I_GRID_SETTINGS                   =
+*   IS_LAYOUT                         =
+*   IT_FIELDCAT                       =
+*   IT_EXCLUDING                      =
+*   IT_SPECIAL_GROUPS                 =
+*   IT_SORT                           =
+*   IT_FILTER                         =
+*   IS_SEL_HIDE                       =
+*   I_DEFAULT                         = 'X'
+*   I_SAVE                            = ' '
+*   IS_VARIANT                        =
+*   IT_EVENTS                         =
+*   IT_EVENT_EXIT                     =
+*   IS_PRINT                          =
+*   IS_REPREP_ID                      =
+*   I_SCREEN_START_COLUMN             = 0
+*   I_SCREEN_START_LINE               = 0
+*   I_SCREEN_END_COLUMN               = 0
+*   I_SCREEN_END_LINE                 = 0
+*   I_HTML_HEIGHT_TOP                 = 0
+*   I_HTML_HEIGHT_END                 = 0
+*   IT_ALV_GRAPHICS                   =
+*   IT_HYPERLINK                      =
+*   IT_ADD_FIELDCAT                   =
+*   IT_EXCEPT_QINFO                   =
+*   IR_SALV_FULLSCREEN_ADAPTER        =
+*   O_PREVIOUS_SRAL_HANDLER           =
+
+*   O_COMMON_HUB                      =
+* IMPORTING
+*   E_EXIT_CAUSED_BY_CALLER           =
+*   ES_EXIT_CAUSED_BY_USER            =
+  TABLES
+    t_outtab                          = it_kna1
+* EXCEPTIONS
+*   PROGRAM_ERROR                     = 1
+*   OTHERS                            = 2
+          .
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
