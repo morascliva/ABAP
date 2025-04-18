@@ -1,0 +1,48 @@
+*&---------------------------------------------------------------------*
+*& Report Z_EXXIT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT Z_EXXIT.
+
+
+
+*DO  10  TIMES.
+*  if sy-index <> 5.
+*
+*  write / sy-index COLOR 1.
+*  else.
+*    exit.   "From Loop
+*  endif.
+*ENDDO.
+*
+*uline.
+
+
+
+*exit. from Whole program
+
+*DO  10  TIMES.
+*  write / sy-index COLOR 1.
+*ENDDO.
+
+uline.
+*Continue - Can be used within Loops Only,
+*Continue with next iteration immediately by
+*ignoring all the statements next to it in that
+*loop Pass
+
+DO  10  TIMES.
+  if sy-index <> 5.
+  write / sy-index COLOR 6.
+  else.
+    write / 'Print Me' COLOR 1.
+    CONTINUE.
+  endif.
+  write : / sy-index,'Why Not ...Print Me too ...' COLOR 7.
+ENDDO.
+
+uline.
+
+* CONTINUE is useful when you want to skip certain iterations based on a
+*condition without terminating the entire loop.
