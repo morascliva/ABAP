@@ -1,1 +1,180 @@
+*&---------------------------------------------------------------------*
+*& Report ZADM_OO_ALV
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_ALV_MANUAL_OO_FCAT.
+
+data : o_cont1 type REF TO cl_gui_custom_container.
+*       o_grid1 type REF TO cl_gui_alv_grid.
+data : it_fcat type lvc_t_fcat,
+       wa_fcat type line of lvc_t_fcat.
+
+START-OF-SELECTION.
+  call SCREEN 9000.
+
+*&---------------------------------------------------------------------*
+*& Module DISPLAY_ALV_9000 OUTPUT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+MODULE display_alv_9000 OUTPUT.
+* SET PF-STATUS 'xxxxxxxx'.
+* SET TITLEBAR 'xxx'.
+  select vbeln,vkorg,kunnr,netwr,waerk
+         into TABLE @data(it_vbak)
+         from vbak
+         up to 20 rows where netwr <> 0.
+
+ if it_vbak is not INITIAL.
+   create OBJECT o_cont1
+     EXPORTING
+*       parent                      =                  " Parent container
+       container_name              = 'C1'                 " Name of the Screen CustCtrl Name to Link Container To
+*       style                       =                  " Windows Style Attributes Applied to this Container
+*       lifetime                    = lifetime_default " Lifetime
+*       repid                       =                  " Screen to Which this Container is Linked
+*       dynnr                       =                  " Report To Which this Container is Linked
+*       no_autodef_progid_dynnr     =                  " Don't Autodefined Progid and Dynnr?
+*     EXCEPTIONS
+*       cntl_error                  = 1                " CNTL_ERROR
+*       cntl_system_error           = 2                " CNTL_SYSTEM_ERROR
+*       create_error                = 3                " CREATE_ERROR
+*       lifetime_error              = 4                " LIFETIME_ERROR
+*       lifetime_dynpro_dynpro_link = 5                " LIFETIME_DYNPRO_DYNPRO_LINK
+*       others                      = 6
+     .
+   IF SY-SUBRC <> 0.
+*    MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*      WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+   ENDIF.
+
+ data(o_grid1) =  new cl_gui_alv_grid(
+*      i_shellstyle            = 0                " Control Style
+*      i_lifetime              =                  " Lifetime
+      i_parent                = o_cont1                 " Parent Container
+*      i_appl_events           = space            " Register Events as Application Events
+*      i_parentdbg             =                  " Internal, Do not Use
+*      i_applogparent          =                  " Container for Application Log
+*      i_graphicsparent        =                  " Container for Graphics
+*      i_name                  =                  " Name
+*      i_fcat_complete         = space            " Boolean Variable (X=True, Space=False)
+*      o_previous_sral_handler =
+*      i_use_one_ux_appearance = abap_false
+*      o_common_hub            =
+*      o_function_tool         =
+    )  .
+
+
+PERFORM prepare_field_cat.
+ call METHOD o_grid1->set_table_for_first_display
+*   EXPORTING
+*     i_buffer_active               =                  " Buffering Active
+*     i_bypassing_buffer            =                  " Switch Off Buffer
+*     i_consistency_check           =                  " Starting Consistency Check for Interface Error Recognition
+*     i_structure_name              = 'ZAK9_ALV_STR'                  " Internal Output Table Structure Name
+*     is_variant                    =                  " Layout
+*     i_save                        =                  " Save Layout
+*     i_default                     = 'X'              " Default Display Variant
+*     is_layout                     =                  " Layout
+*     is_print                      =                  " Print Control
+*     it_special_groups             =                  " Field Groups
+*     it_toolbar_excluding          =                  " Excluded Toolbar Standard Functions
+*     it_hyperlink                  =                  " Hyperlinks
+*     it_alv_graphics               =                  " Table of Structure DTC_S_TC
+*     it_except_qinfo               =                  " Table for Exception Quickinfo
+*     ir_salv_adapter               =                  " Internal Usage only !!! - obsolete
+   CHANGING
+     it_outtab                     = it_vbak                 " Output Table
+     it_fieldcatalog               = it_fcat                 " Field Catalog
+*     it_sort                       =                  " Sort Criteria
+*     it_filter                     =                  " Filter Criteria
+*   EXCEPTIONS
+*     invalid_parameter_combination = 1                " Wrong Parameter
+*     program_error                 = 2                " Program Errors
+*     too_many_lines                = 3                " Too many Rows in Ready for Input Grid
+*     others                        = 4
+   .
+ IF SY-SUBRC <> 0.
+*  MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*    WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ ENDIF.
+ ENDIF.
+ENDMODULE.
+
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_9000  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_9000 INPUT.
+if sy-ucomm = 'BK'.
+   leave TO SCREEN 0.
+ENDIF.
+ENDMODULE.
+
+*&---------------------------------------------------------------------*
+*& Form prepare_field_cat
+*&---------------------------------------------------------------------*
+FORM prepare_field_cat .
+clear wa_fcat.
+      wa_fcat-fieldname = 'VBELN'.
+      wa_fcat-col_pos   = 1.
+      wa_fcat-coltext = 'Sales Order'.
+      wa_fcat-key       = 'X'.
+append wa_fcat to it_fcat.
+
+clear wa_fcat.
+      wa_fcat-fieldname = 'KUNNR'.
+      wa_fcat-col_pos   = 2.
+      wa_fcat-coltext = 'Customer'.
+append wa_fcat to it_fcat.
+
+clear wa_fcat.
+      wa_fcat-fieldname = 'VKORG'.
+      wa_fcat-col_pos   = 3.
+      wa_fcat-coltext = 'sorg'.
+      wa_fcat-emphasize = 'C71'.
+append wa_fcat to it_fcat.
+
+clear wa_fcat.
+      wa_fcat-fieldname = 'NETWR'.
+      wa_fcat-col_pos   = 4.
+      wa_fcat-coltext = 'Price'.
+      wa_fcat-just      = 'C'.
+      wa_fcat-do_sum    = 'X'.
+append wa_fcat to it_fcat.
+
+clear wa_fcat.
+      wa_fcat-fieldname = 'WAERK'.
+      wa_fcat-col_pos   = 5.
+      wa_fcat-coltext = 'Cur.Key'.
+append wa_fcat to it_fcat.
+*clear wa_fcat.
+*      wa_fcat-fieldname = 'VKORGR'.
+*      wa_fcat-col_pos   = 3.
+*      wa_fcat-seltext_m = 'sorg'.
+*      wa_fcat-emphasize = 'C71'.
+*append wa_fcat to it_fcat.
+ENDFORM.
+---------------------------------------------------------------------------------------------------------------------
+
+1.Data Declarations
+Declares a reference variable for the custom container (o_cont1).
+Declares an internal table (it_fcat) and a work area (wa_fcat) for the field catalog.
+2.Screen Call
+3.Module DISPLAY_ALV_9000 OUTPUT
+SELECT statement: Fetches data from the VBAK table.
+CREATE OBJECT o_cont1: Creates a custom container (o_cont1) linked to the screen control named 'C1'.
+DATA(o_grid1) = NEW cl_gui_alv_grid: Creates an ALV grid object (o_grid1) with the custom container as its parent.
+PERFORM prepare_field_cat: Calls a form to prepare the field catalog.
+CALL METHOD o_grid1->set_table_for_first_display: Displays the data in the ALV grid using the manually defined field catalog (it_fcat).
+4.Module USER_COMMAND_9000 INPUT
+Handles user commands, specifically the 'BK' command to leave the screen.
+5.Form prepare_field_cat
+Defines the field catalog (it_fcat) with specific attributes for each column.
+
+SUMMARY
+This program leverages object-oriented techniques to create a flexible and interactive ALV report with a manually defined field catalog.
+It provides detailed control over the display and behavior of the data, enhancing the user experience.
 
