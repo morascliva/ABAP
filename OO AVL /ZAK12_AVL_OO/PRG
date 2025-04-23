@@ -1,0 +1,127 @@
+*&---------------------------------------------------------------------*
+*& Report ZADM_OO_ALV
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_ALV_OO.
+
+data : o_cont1 type REF TO cl_gui_custom_container.
+*       o_grid1 type REF TO cl_gui_alv_grid.
+
+START-OF-SELECTION.
+  call SCREEN 9000.
+
+*&---------------------------------------------------------------------*
+*& Module DISPLAY_ALV_9000 OUTPUT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+MODULE display_alv_9000 OUTPUT.
+* SET PF-STATUS 'xxxxxxxx'.
+* SET TITLEBAR 'xxx'.
+  select vbeln,vkorg,kunnr,netwr,waerk
+         into TABLE @data(it_vbak)
+         from vbak
+         up to 20 rows where netwr <> 0.
+
+ if it_vbak is not INITIAL.
+   create OBJECT o_cont1
+     EXPORTING
+*       parent                      =                  " Parent container
+       container_name              = 'C1'                 " Name of the Screen CustCtrl Name to Link Container To
+*       style                       =                  " Windows Style Attributes Applied to this Container
+*       lifetime                    = lifetime_default " Lifetime
+*       repid                       =                  " Screen to Which this Container is Linked
+*       dynnr                       =                  " Report To Which this Container is Linked
+*       no_autodef_progid_dynnr     =                  " Don't Autodefined Progid and Dynnr?
+*     EXCEPTIONS
+*       cntl_error                  = 1                " CNTL_ERROR
+*       cntl_system_error           = 2                " CNTL_SYSTEM_ERROR
+*       create_error                = 3                " CREATE_ERROR
+*       lifetime_error              = 4                " LIFETIME_ERROR
+*       lifetime_dynpro_dynpro_link = 5                " LIFETIME_DYNPRO_DYNPRO_LINK
+*       others                      = 6
+     .
+   IF SY-SUBRC <> 0.
+*    MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*      WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+   ENDIF.
+
+ data(o_grid1) =  new cl_gui_alv_grid(
+*      i_shellstyle            = 0                " Control Style
+*      i_lifetime              =                  " Lifetime
+      i_parent                = o_cont1                 " Parent Container
+*      i_appl_events           = space            " Register Events as Application Events
+*      i_parentdbg             =                  " Internal, Do not Use
+*      i_applogparent          =                  " Container for Application Log
+*      i_graphicsparent        =                  " Container for Graphics
+*      i_name                  =                  " Name
+*      i_fcat_complete         = space            " Boolean Variable (X=True, Space=False)
+*      o_previous_sral_handler =
+*      i_use_one_ux_appearance = abap_false
+*      o_common_hub            =
+*      o_function_tool         =
+    )  .
+
+ call METHOD o_grid1->set_table_for_first_display
+   EXPORTING
+*     i_buffer_active               =                  " Buffering Active
+*     i_bypassing_buffer            =                  " Switch Off Buffer
+*     i_consistency_check           =                  " Starting Consistency Check for Interface Error Recognition
+     i_structure_name              = 'ZAK9_ALV_STR'                  " Internal Output Table Structure Name
+*     is_variant                    =                  " Layout
+*     i_save                        =                  " Save Layout
+*     i_default                     = 'X'              " Default Display Variant
+*     is_layout                     =                  " Layout
+*     is_print                      =                  " Print Control
+*     it_special_groups             =                  " Field Groups
+*     it_toolbar_excluding          =                  " Excluded Toolbar Standard Functions
+*     it_hyperlink                  =                  " Hyperlinks
+*     it_alv_graphics               =                  " Table of Structure DTC_S_TC
+*     it_except_qinfo               =                  " Table for Exception Quickinfo
+*     ir_salv_adapter               =                  " Internal Usage only !!! - obsolete
+   CHANGING
+     it_outtab                     = it_vbak                 " Output Table
+*     it_fieldcatalog               =                  " Field Catalog
+*     it_sort                       =                  " Sort Criteria
+*     it_filter                     =                  " Filter Criteria
+*   EXCEPTIONS
+*     invalid_parameter_combination = 1                " Wrong Parameter
+*     program_error                 = 2                " Program Errors
+*     too_many_lines                = 3                " Too many Rows in Ready for Input Grid
+*     others                        = 4
+   .
+ IF SY-SUBRC <> 0.
+*  MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*    WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+ ENDIF.
+ ENDIF.
+ENDMODULE.
+
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_9000  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_9000 INPUT.
+if sy-ucomm = 'BK'.
+   leave TO SCREEN 0.
+ENDIF.
+ENDMODULE.
+
+
+1.Data Selection
+2.Screen Call
+This calls screen 9000, where the ALV grid will be displayed.
+3.Module DISPLAY_ALV_9000 OUTPUT
+SELECT statement: Fetches data from the VBAK table.
+CREATE OBJECT o_cont1: Creates a custom container (o_cont1) linked to the screen control named 'C1'.
+DATA(o_grid1) = NEW cl_gui_alv_grid: Creates an ALV grid object (o_grid1) with the custom container as its parent.
+CALL METHOD o_grid1->set_table_for_first_display: Displays the data in the ALV grid using the structure ZAK9_ALV_STR.
+4.Module USER_COMMAND_9000 INPUT
+Handles user commands, specifically the 'BK' command to leave the screen.
+
+Object-Oriented Approach: The new program uses object-oriented techniques (cl_gui_custom_container and cl_gui_alv_grid) to create and manage the ALV grid, whereas the previous programs used the classical REUSE_ALV_GRID_DISPLAY function module.
+Custom Container: The new program creates a custom container (o_cont1) to embed the ALV grid within a specific screen control, providing more flexibility in screen design.
+Screen Handling: The new program calls a specific screen (9000) and handles user commands within that screen, offering a more interactive and dynamic user interface.
+Field Catalog: The field catalog is not explicitly defined in the new program, relying on the structure ZAK9_ALV_STR for column definitions.
