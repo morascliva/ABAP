@@ -1,0 +1,20 @@
+REPORT ZAK12_DELETE_CUSTOMER.
+
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME.
+  PARAMETERS : p_kunnr TYPE kunnr.
+
+SELECTION-SCREEN END OF BLOCK b1.
+
+DATA : wa_kna1 TYPE kna1.
+
+
+CLEAR wa_kna1.
+wa_kna1-kunnr = p_kunnr.
+
+DELETE kna1 FROM wa_kna1.
+IF sy-subrc = 0.
+  COMMIT WORK.
+  WRITE / 'Customer Deleted Successfully' COLOR 1.
+ELSE.
+  WRITE / 'Customer Already Exist' COLOR 3.
+ENDIF.
