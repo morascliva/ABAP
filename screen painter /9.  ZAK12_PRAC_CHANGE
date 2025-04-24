@@ -1,0 +1,60 @@
+*&---------------------------------------------------------------------*
+*& Report ZAK12_PRAC_CHANGE
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_PRAC_CHANGE.
+TABLES kna1.
+call SCREEN 4999 .
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_4999  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_4999 INPUT.
+CASE sy-ucomm.
+  WHEN 'CHANGE'.
+    select SINGLE kunnr,
+                  name1,
+                  ort01,
+                  land1,
+                 pstlz into CORRESPONDING FIELDS OF @kna1
+           from kna1 where kunnr = @kna1-kunnr.
+   if sy-subrc = 0.
+       call SCREEN 4000.
+
+
+   else.
+         MESSAGE 'NO Customer to Change' type 'I'.
+   ENDIF.
+  WHEN 'BACK'.
+    leave TO SCREEN 0.
+  WHEN OTHERS.
+ENDCASE.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_4000  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_4000 INPUT.
+IF sy-ucomm = 'BK'.
+  leave to SCREEN 0.
+ENDIF.
+
+if sy-ucomm = 'SV'. "Fctcode always in Caps
+*wa_kna1-kunnr = kna1-kunnr.
+*wa_kna1-name1 = kna1-name1.
+*wa_kna1-ort01 = kna1-ort01.
+*wa_kna1-land1 = kna1-land1.
+*wa_kna1-pstlz = kna1-pstlz.
+update kna1 from kna1. "also insert <DBT> from <wa>.
+*insert kna1. "short form of insert kna1 from kna1.
+if sy-subrc = 0.
+   MESSAGE 'Updated Successfully' type 'S'.
+else.
+  MESSAGE 'Customer Already Exist' type 'I'.
+endif.
+endif.
+ENDMODULE.
