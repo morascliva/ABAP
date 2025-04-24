@@ -1,0 +1,31 @@
+*&---------------------------------------------------------------------*
+*& Report ZAK12_PRAC
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_PRAC_CREATE.
+
+TABLES  kna1.
+call screen 4000.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_4000  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_4000 INPUT.
+
+  CASE sy-ucomm.
+    WHEN 'CREATE'.
+      SELECT SINGLE kunnr into @data(1v_kunnr)
+        FROM kna1 WHERE kunnr = @kna1-kunnr.
+
+   if sy-subrc = 0.
+     MESSAGE 'Customer Already Exists' type 'I'.
+   ENDIF.
+
+   WHEN 'BACK'.
+     leave to screen 0.
+   WHEN OTHERS.
+ENDCASE.
+
+ENDMODULE.
