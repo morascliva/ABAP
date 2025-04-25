@@ -1,0 +1,49 @@
+1.Which string functions are predicates?
+Matches()
+Count_any_off()
+
+2.When Demo/Connection is a database table, Data connection_full TYPE/DEMO/CONNECTION. 
+Whats the variable type connection_full ?
+Structure 
+
+3.Which restrictions exist for ABAP SQL arthimatic expressions ?
+-The operator / is allowed only in floating point expressions 
+-Floating point types and integer types can not be used in the same expression
+
+4.Class super has subclass sub 
+Which rules are valid for sub Constructor 
+-The method signatures can be changed 
+-The constructor of super must be called before using any components of your instance 
+
+5.Which of the following are parts of the definition of new table ?
+-Field List 
+-Semantic table attributes
+
+6.Which function call returns 0 ?
+-find_any_of(val ='ABAP ABAP abap ' sub='AB')
+
+7.DATA(gv_result)=1/8.What will be the data type of gv_result?
+TYPE I
+
+8.When there is Super class  and Sub class of it. Each class has it own static constructor,instance constructor.
+When the program create the instance of subclass,in which sequence the constructors are executed?
+1.class constructor of super
+2.class constructor of sub
+3.instance constructor of super 
+4.instance constructor of sub 
+
+9.In a class ZABC, we use the statement DATA var TYPE ***.
+What may stands in place of ***?
+Name of the data element from abap dictionary 
+
+10.Which system variable maintains the current record index while looping into table ?
+sy-index
+
+11.Why do we use access control on CDS views ?
+-Do not need to remember implementing AUTHORITY-CHECK statement
+-Only the data corresponding to users authorization is transferred from Database to application 
+
+12.Which of the following are the valid Sort operations on internal table?
+-Sort a standard table using -SORT itab.
+-Sort a standard table using -SORT itab ASENDING 
+-Sort a standard table using SORT itab by fields1 field2.
