@@ -47,3 +47,35 @@ sy-index
 -Sort a standard table using -SORT itab.
 -Sort a standard table using -SORT itab ASENDING 
 -Sort a standard table using SORT itab by fields1 field2.
+
+
+13. While processing DO-ENDDO ,which system variable holds the index of current loop iteration ?
+SY-INDEX
+
+14.the following is to define a database table in hana .
+Which field is defined incorrectly ?
+{
+KEY Field1 : REFERENCE TO abap.clnt(3);
+KEY Field2 : abap.char(1332);
+Field3: abap quan(2);
+Field4: abap.unit(2);
+}
+
+-Field1
+
+14.Which of the following are incomplete Data types?
+a C
+b T 
+c String 
+d P
+-C,P
+
+15. Whic of the following Data Declaration always works without truncation,
+rounding for assignment gv_target= gv_source ?
+-DATA gv_source TYPE D. DATA gv_target TYPE sy-datum.
+-DATA gv-source TYPR C. DATA gv_target TYPE string .
+
+16.In an access comtrol of CDS object , Which clauses are used ?
+-RETURN CODE
+-WHERE
+-DEFINE ROLE 
