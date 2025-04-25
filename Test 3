@@ -1,1 +1,32 @@
+1.System variable to set no of lines to be displayed in a page ?
+SY-LINCT
 
+2.How to achieve pass by value in subroutines?
+USING VALUE()
+
+3.Which is true for New Open SQL?
+Both Comma separated and allows inline declaration 
+
+4.Function Group is mandatory for every Function Module ?
+True 
+
+5.Changing to formals need to be reflected into actuals only after completion of subroutine call ,
+can be achieved via 
+CHANGING VALUE()
+
+6.Which is the default type of internal table ?
+Standard 
+
+7.Which is true about Function Module ?
+-Created in Function Builder 
+-Can be called from any program 
+-can be tested independently 
+
+8.Which event is used to validate selections ?
+At selection screen 
+
+9.Which is True about ABAP ?
+Both 4rth generational lang and is not case sensitive .
+
+10.Which is true for standard internal tables?
+is default type 
