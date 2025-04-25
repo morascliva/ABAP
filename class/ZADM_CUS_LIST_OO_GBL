@@ -1,0 +1,43 @@
+START-OF-SELECTION.
+data o1 type REF TO ZADM_CL_CUSTOMERS.
+
+
+create OBJECT o1
+  EXPORTING
+    ctry_key =  'IN'                " Country/Region Key
+  .
+
+*call METHOD o1->get
+*  EXPORTING
+*    ctry_key = 'IN'                 " Country/Region Key
+*  .
+
+call METHOD o1->display.
+
+call METHOD o1->save_to_file
+  EXPORTING
+    file = 'C:\ADM2025\GBL_customers.txt'
+
+.
+
+1. Data Declaration:
+This line declares a variable o1 which is a reference to an object of the class ZADM_CL_CUSTOMERS.
+
+2.Object Creation:
+This line creates an instance of the ZADM_CL_CUSTOMERS class and assigns it to the reference variable o1. The ctry_key parameter is set to 'IN', indicating that the object is initialized with the country key for India.
+
+3.Method Calls:
+Display Method:
+This line calls the display method of the o1 object. The specifics of what this method does depend on its implementation in the ZADM_CL_CUSTOMERS class, but typically it might display customer information.
+Save to File Method:
+This line calls the save_to_file method of the o1 object, exporting the customer data to a file located at C:\ADM2025\GBL_customers.txt.
+
+
+Variable Declaration:
+--------------------
+This line declares a reference variable o1 that can point to an instance of the ZADM_CL_CUSTOMERS class. Without this declaration, you wouldn't have a way to refer to or interact with the object you create.
+
+Object Creation:
+----------------
+This line actually creates an instance of the class and assigns it to the reference variable o1. The ctry_key parameter is used to initialize the object with specific data (in this case, the country key for India).
+The program creates an object to manage customer data for India, displays the data, and saves it to a specified file.
