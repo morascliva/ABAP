@@ -1,0 +1,46 @@
+*&---------------------------------------------------------------------*
+*& Report ZAK12_PRAC_DISPLAY
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_PRAC_DISPLAY.
+tables kna1.
+call SCREEN 8999 .
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_8999  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_8999 INPUT.
+CASE sy-ucomm.
+  WHEN 'DISPLAY'.
+    select SINGLE kunnr,
+                  name1,
+                  ort01,
+                  land1,
+                 pstlz into CORRESPONDING FIELDS OF @kna1
+           from kna1 where kunnr = @kna1-kunnr.
+   if sy-subrc = 0. "Customer Exist
+       call SCREEN 9000.
+
+
+   else.
+         MESSAGE 'NO Customer to Display' type 'I'.
+   ENDIF.
+  WHEN 'BACK'.
+    leave TO SCREEN 0.
+  WHEN OTHERS.
+ENDCASE.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_9000  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_9000 INPUT.
+IF sy-ucomm = 'BK'.
+  leave to SCREEN 0.
+ENDIF.
+
+ENDMODULE.
