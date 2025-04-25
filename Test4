@@ -70,7 +70,7 @@ c String
 d P
 -C,P
 
-15. Whic of the following Data Declaration always works without truncation,
+15. Which of the following Data Declaration always works without truncation,
 rounding for assignment gv_target= gv_source ?
 -DATA gv_source TYPE D. DATA gv_target TYPE sy-datum.
 -DATA gv-source TYPR C. DATA gv_target TYPE string .
@@ -79,3 +79,20 @@ rounding for assignment gv_target= gv_source ?
 -RETURN CODE
 -WHERE
 -DEFINE ROLE 
+
+
+
+17. DATA go_super TYPE REF TO ,<lcl_super>,
+    Go_sub TYPE REF TO <lcl_super>.
+    Go_sub1 = CAST #(go_super).
+    Go_sub1->sub1_meth1().
+    With which predicate condition ,can ensure that the CAST will work ?
+-IS INSTANCE OF 
+
+18.Which of the following can be assigned as alias?
+-Database Table 
+-Field(from field list)
+
+19.What is allowed as a Data Source while defining CDS view Entity?
+-a database table from ABAP Dictionary
+-a CDS DDIC  based view
