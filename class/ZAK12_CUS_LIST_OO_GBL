@@ -1,0 +1,64 @@
+REPORT zak12_cus_list_oo_gbl.
+
+
+START-OF-SELECTION.
+data o1 type REF TO zak3_global_class_oo.
+
+
+create OBJECT : o1.
+
+call METHOD o1->get
+  EXPORTING
+    ctry_key = 'IN'                 " Country/Region Key
+  .
+
+call METHOD o1->display.
+
+call METHOD o1->save_to_file
+  EXPORTING
+    file = 'C:\cliva\UScustomers.txt'
+  .
+
+ZAK3_GLOBAL_CLASS_OO
+GET                   PUBLIC
+DISPLAY               PUBLIC
+SAVE_TO_FILE          PUBLIC
+
+DOUBLE CLICK ON THEM 
+ GET
+  method GET.
+    SELECT lifnr
+         land1
+         name1
+         ort01
+  FROM lfa1
+  INTO CORRESPONDING FIELDS OF TABLE it_lfa1 where land1 = ctry_key.
+  endmethod.
+------------------
+DISPLAY
+  method DISPLAY.
+
+  IF it_lfa1 IS NOT INITIAL.
+
+    LOOP AT it_lfa1 INTO wa_lfa1.
+      WRITE : / sy-tabix COLOR 1,
+                wa_lfa1-lifnr color 2,
+                wa_lfa1-name1 COLOR 3,
+                wa_lfa1-ort01 COLOR 4,
+                wa_lfa1-land1 COLOR 5.
+    ENDLOOP.
+
+  ELSE.
+    WRITE : / 'No Customers ' COLOR 1.
+  ENDIF.
+
+
+  endmethod.
+--------------------
+SAVE_TO_FILE 
+GUI_DOWNLOAD
+-------------------
+ATTRIBUTES
+
+WA_LFA1   PRIVATE
+IT_LFA1   PRIVATE
