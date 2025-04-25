@@ -1,0 +1,51 @@
+
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zak12_cus_oo_gbl_constructor.
+
+
+START-OF-SELECTION.
+data o1 type REF TO ZADM_CL_CUSTOMERS.
+
+
+create OBJECT o1
+  EXPORTING
+    ctry_key =  'IN'                " Country/Region Key
+  .
+
+*call METHOD o1->get
+*  EXPORTING
+*    ctry_key = 'IN'                 " Country/Region Key
+*  .
+
+call METHOD o1->display.
+
+call METHOD o1->save_to_file
+  EXPORTING
+    file = 'C:\cliva\GBL_customers.txt'
+  .
+
+
+CONSTRUCTOR 
+-----------
+  method CONSTRUCTOR.
+        SELECT kunnr
+         land1
+         name1
+         ort01
+  FROM kna1
+  INTO CORRESPONDING FIELDS OF TABLE it_kna1
+  where land1 = ctry_key.
+  endmethod.
+
+
+This CONSTRUCTOR method initializes an object by selecting customer data from the kna1 table where the country key (land1) matches the provided ctry_key, and stores the results in the internal table it_kna1.
+
+CONSTRUCTOR Method:
+
+Purpose: The CONSTRUCTOR method is a special method that is automatically called when an object is created. Its primary purpose is to initialize the object with necessary data or set up initial states.
+
+GET Method:
+
+Purpose: The GET method is a regular method that can be called explicitly at any time after the object has been created.
