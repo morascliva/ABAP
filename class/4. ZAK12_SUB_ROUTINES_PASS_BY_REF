@@ -1,0 +1,11 @@
+
+data v_count type i VALUE 10.
+
+PERFORM process_data USING v_count.
+   write : / 'v_count After FORM' , v_count COLOR 3.
+
+form process_data USING x type i.
+   x = x + 1.
+   write : / 'X=', x COLOR 3.
+   write : / 'v_count with in FORM' , v_count COLOR 3.
+ENDFORM.
