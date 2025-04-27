@@ -9,3 +9,6 @@ form process_data CHANGING value(x) type i.
    write : / 'X=', x COLOR 3.
    write : / 'v_count with in FORM' , v_count COLOR 3.
 ENDFORM.
+
+Passing by Value: The subroutine works with a local copy of the variable, so changes to x do not affect v_count.
+Passing by Reference: The subroutine works with the original variable, so changes to x directly affect v_count.
