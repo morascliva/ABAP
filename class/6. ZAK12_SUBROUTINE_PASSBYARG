@@ -1,0 +1,17 @@
+REPORT ZAK12_SUBROUTINE_PASSBYARG.
+
+PARAMETERS no TYPE i DEFAULT 10. "printing 10 nos
+
+PERFORM print_number USING no .
+uline.
+PERFORM print_number USING 30.
+
+
+FORM  print_number USING X TYPE i.
+DO X  TIMES.
+  WRITE / sy-index.
+ENDDO.
+ENDFORM.
+
+"Pass by argument" refers to the way values are passed to subroutines or functions in programming. There are two main
+methods for passing arguments: pass by value and pass by reference.
