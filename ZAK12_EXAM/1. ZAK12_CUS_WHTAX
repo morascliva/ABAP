@@ -1,0 +1,26 @@
+*&---------------------------------------------------------------------*
+*& Report ZAK12_CUS_WHTAX
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_CUS_WHTAX.
+
+PARAMETERS p_kunnr type ZAK12_kunnr.
+data it_knbm type ZAK12_TT_knbm.
+data wa_knbm type line of ZAK12_TT_knbm.
+
+CALL FUNCTION 'ZAK12_CUS_WHTAX_FM'
+  EXPORTING
+    im_kunnr       = p_kunnr
+ IMPORTING
+  IT_KNBM        = it_knbm
+          .
+
+
+
+loop at it_knbm into wa_knbm.
+  write : / wa_knbm-kunnr color 3,
+            wa_knbm-bukrs color 4,
+            wa_knbm-witht color 5,
+            wa_knbm-wt_exrt color 6.
+    ENDLOOP.
