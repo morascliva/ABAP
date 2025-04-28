@@ -1,0 +1,86 @@
+report ZADM_BDC_MM01_VIA_REC
+       no standard page heading line-size 255.
+
+* Include bdcrecx1_s:
+* The call transaction using is called WITH AUTHORITY-CHECK!
+* If you have own auth.-checks you can use include bdcrecx1 instead.
+*include bdcrecx1_s.
+
+types : BEGIN OF ty_file,
+        matnr type RMMG1-MATNR, "MaTAL NO
+        mbrsh type RMMG1-MBRSH,  "Ind Sec
+        mtart type RMMG1-MTART,
+        maktx type MAKT-MAKTX,
+        meins type MARA-MEINS,
+       end    of ty_file.
+
+data : wa_bdcdata type bdcdata,
+       it_bdcdata type TABLE of bdcdata,
+       wa_file    type ty_file,
+       it_file    type TABLE of ty_file.
+
+
+start-of-selection.
+
+
+*perform open_group.
+loop at it_file into wa_file.
+perform bdc_dynpro      using 'SAPLMGMM' '0060'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'RMMG1-MTART'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=ENTR'.
+perform bdc_field       using 'RMMG1-MATNR'
+                              wa_file-matnr.
+perform bdc_field       using 'RMMG1-MBRSH'
+                              wa_file-mbrsh.
+perform bdc_field       using 'RMMG1-MTART'
+                              wa_file-mtart.
+
+perform bdc_dynpro      using 'SAPLMGMM' '0070'.
+perform bdc_field       using 'BDC_CURSOR'
+                              'MSICHTAUSW-DYTXT(01)'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=ENTR'.
+perform bdc_field       using 'MSICHTAUSW-KZSEL(01)'
+                              'X'.
+
+perform bdc_dynpro      using 'SAPLMGMM' '4004'.
+perform bdc_field       using 'BDC_OKCODE'
+                              '=BU'.
+perform bdc_field       using 'MAKT-MAKTX'
+                              wa_file-maktx.
+perform bdc_field       using 'BDC_CURSOR'
+                              'MARA-MEINS'.
+perform bdc_field       using 'MARA-MEINS'
+                              wa_file-meins.
+perform bdc_field       using 'MARA-MSTAE'
+                              '02'.
+perform bdc_field       using 'MARA-MSTDE'
+                              '26.04.2025'.
+
+ call TRANSACTION 'MM01' USING it_bdcdata.
+*perform bdc_transaction using 'MM01'.
+refresh it_bdcdata.
+endloop.
+*perform close_group.
+
+FORM BDC_DYNPRO USING fp_PROGRAM fp_DYNPRO.
+  CLEAR wa_BDCDATA.
+  wa_BDCDATA-PROGRAM  = fp_PROGRAM.
+  wa_BDCDATA-DYNPRO   = fp_DYNPRO.
+  wa_BDCDATA-DYNBEGIN = 'X'.
+  APPEND wa_BDCDATA to it_bdcdata.
+ENDFORM.
+
+*----------------------------------------------------------------------*
+*        Insert field                                                  *
+*----------------------------------------------------------------------*
+FORM BDC_FIELD USING fp_FNAM fp_FVAL.
+ if fp_fval is not INITIAL.
+    CLEAR wa_BDCDATA.
+    wa_BDCDATA-FNAM = fp_FNAM.
+    wa_BDCDATA-FVAL = fp_FVAL.
+    APPEND wa_BDCDATA to it_bdcdata.
+  ENDIF.
+ENDFORM.
