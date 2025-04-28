@@ -1,0 +1,120 @@
+*&---------------------------------------------------------------------*
+*& Report ZAK12_BDCFI01
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_BDCFI02.
+
+TYPES : BEGIN OF ty_file,
+        ctry_num type BNKA-BANKS,
+        bank_key type BNKA-BANKL,
+        bank_name type BNKA_ADDR_UI-BANK_NAME,
+        end of ty_file.
+
+
+
+data : wa_file type ty_file,
+       it_file type table of ty_file,
+       wa_bdcdata type bdcdata,
+       it_bdcdata type table of bdcdata.
+
+
+cl_gui_frontend_services=>gui_upload(
+ EXPORTING
+    filename                = 'C:\cliva\data_fi01.txt'           " Name of file
+*    filetype                = 'ASC'            " File Type (ASCII, Binary)
+    has_field_separator     =  'X'            " Columns Separated by Tabs in Case of ASCII Upload
+*    header_length           = 0                " Length of Header for Binary Data
+*    read_by_line            = 'X'              " File Written Line-By-Line to the Internal Table
+*    dat_mode                = space            " Numeric and date fields are in DAT format in WS_DOWNLOAD
+*    codepage                =                  " Character Representation for Output
+*    ignore_cerr             = abap_true        " Ignore character set conversion errors?
+*    replacement             = '#'              " Replacement Character for Non-Convertible Characters
+*    virus_scan_profile      =                  " Virus Scan Profile
+*  IMPORTING
+*    filelength              =                  " File Length
+*    header                  =                  " File Header in Case of Binary Upload
+  CHANGING
+    data_tab                =  it_file                " Transfer table for file contents
+*    isscanperformed         = space            " File already scanned
+*  EXCEPTIONS
+*    file_open_error         = 1                " File does not exist and cannot be opened
+*    file_read_error         = 2                " Error when reading file
+*    no_batch                = 3                " Front-End Function Cannot Be Executed in Backgrnd
+*    gui_refuse_filetransfer = 4                " Incorrect front end or error on front end
+*    invalid_type            = 5                " Incorrect parameter FILETYPE
+*    no_authority            = 6                " No Upload Authorization
+*    unknown_error           = 7                " Unknown error
+*    bad_data_format         = 8                " Cannot Interpret Data in File
+*    header_not_allowed      = 9                " Invalid header
+*    separator_not_allowed   = 10               " Invalid separator
+*    header_too_long         = 11               " Header information currently restricted to 1023 bytes
+*    unknown_dp_error        = 12               " Error when calling data provider
+*    access_denied           = 13               " Access to File Denied
+*    dp_out_of_memory        = 14               " Not Enough Memory in DataProvider
+*    disk_full               = 15               " Storage Medium full
+*    dp_timeout              = 16               " Timeout of DataProvider
+*    not_supported_by_gui    = 17               " GUI does not support this
+*    error_no_gui            = 18               " GUI not available
+*    others                  = 19
+).
+
+
+
+IF sy-subrc = 0.
+
+
+
+*loop at it_file into wa_file.
+*  write:/ wa_file-ctry_num color 6  ,
+*          wa_file-bank_key color 7,
+*          wa_file-bank_name color 5.
+*
+*
+*
+*endloop.
+
+loop at it_file into wa_file.
+  clear wa_bdcdata.
+  wa_bdcdata-program = 'SAPMF02B'.
+  wa_bdcdata-DYNPRO = 0100.
+  wa_bdcdata-DYNBEGIN = 'X'.
+  append wa_bdcdata to it_bdcdata.
+
+  clear wa_bdcdata.
+  wa_bdcdata-fnam = 'BDC_OKCODE'.
+  wa_bdcdata-FVAL = '/00' .
+  append wa_bdcdata to it_bdcdata.
+
+  clear wa_bdcdata.
+  wa_bdcdata-fnam = 'BNKA-BANKS'.
+  wa_bdcdata-FVAL = wa_file-ctry_num  .
+  append wa_bdcdata to it_bdcdata.
+
+   clear wa_bdcdata.
+  wa_bdcdata-fnam = 'BNKA-BANKL'.
+  wa_bdcdata-FVAL = wa_file-bank_key .
+  append wa_bdcdata to it_bdcdata.
+
+    clear wa_bdcdata.
+   wa_bdcdata-program = 'SAPMF02B'.
+  wa_bdcdata-DYNPRO = 0100.
+  wa_bdcdata-DYNBEGIN = 'X'.
+  append wa_bdcdata to it_bdcdata.
+
+    clear wa_bdcdata.
+  wa_bdcdata-fnam = 'BDC_OKCODE'.
+  wa_bdcdata-FVAL = '=UPDA' .
+  append wa_bdcdata to it_bdcdata.
+
+  clear wa_bdcdata.
+   wa_bdcdata-fnam = 'BNKA_ADDR_UI-BANK_NAME'.
+  wa_bdcdata-FVAL = wa_file-bank_name.
+
+  append wa_bdcdata to it_bdcdata.
+  call transaction 'FI01' using it_bdcdata.
+  clear it_bdcdata.
+
+  endloop.
+
+  endif.
