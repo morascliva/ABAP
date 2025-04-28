@@ -1,0 +1,144 @@
+*&---------------------------------------------------------------------*
+*& Report ZADM_BDC_FOR_FI01
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZAK12_BDC_FOR_FI01_WITH_FORMS.
+
+types : BEGIN OF ty_file,
+          banks type BNKA-BANKS,
+          bankl type BNKA-BANKL,
+          bank_name type BNKA_ADDR_UI-BANK_NAME,
+        END OF   ty_file.
+
+data : wa_file type ty_file,
+       it_file type TABLE of ty_file,
+       wa_bdcdata type bdcdata,
+       it_bdcdata type TABLE OF bdcdata,
+       wa_bdcmsgcoll type bdcmsgcoll,
+       it_bdcmsgcoll type TABLE OF bdcmsgcoll.
+include zadm_bdc_forms.
+*Call FM - GUI_UPLOAD
+*Display the uploaded Data
+
+START-OF-SELECTION.
+cl_gui_frontend_services=>gui_upload(
+  EXPORTING
+    filename                = 'C:\ADM2025\FI01.txt'           " Name of file
+*    filetype                = 'ASC'            " File Type (ASCII, Binary)
+    has_field_separator     = 'X'            " Columns Separated by Tabs in Case of ASCII Upload
+*    header_length           = 0                " Length of Header for Binary Data
+*    read_by_line            = 'X'              " File Written Line-By-Line to the Internal Table
+*    dat_mode                = space            " Numeric and date fields are in DAT format in WS_DOWNLOAD
+*    codepage                =                  " Character Representation for Output
+*    ignore_cerr             = abap_true        " Ignore character set conversion errors?
+*    replacement             = '#'              " Replacement Character for Non-Convertible Characters
+*    virus_scan_profile      =                  " Virus Scan Profile
+*  IMPORTING
+*    filelength              =                  " File Length
+*    header                  =                  " File Header in Case of Binary Upload
+  CHANGING
+    data_tab                = it_file                  " Transfer table for file contents
+*    isscanperformed         = space            " File already scanned
+*  EXCEPTIONS
+*    file_open_error         = 1                " File does not exist and cannot be opened
+*    file_read_error         = 2                " Error when reading file
+*    no_batch                = 3                " Front-End Function Cannot Be Executed in Backgrnd
+*    gui_refuse_filetransfer = 4                " Incorrect front end or error on front end
+*    invalid_type            = 5                " Incorrect parameter FILETYPE
+*    no_authority            = 6                " No Upload Authorization
+*    unknown_error           = 7                " Unknown error
+*    bad_data_format         = 8                " Cannot Interpret Data in File
+*    header_not_allowed      = 9                " Invalid header
+*    separator_not_allowed   = 10               " Invalid separator
+*    header_too_long         = 11               " Header information currently restricted to 1023 bytes
+*    unknown_dp_error        = 12               " Error when calling data provider
+*    access_denied           = 13               " Access to File Denied
+*    dp_out_of_memory        = 14               " Not Enough Memory in DataProvider
+*    disk_full               = 15               " Storage Medium full
+*    dp_timeout              = 16               " Timeout of DataProvider
+*    not_supported_by_gui    = 17               " GUI does not support this
+*    error_no_gui            = 18               " GUI not available
+*    others                  = 19
+).
+IF SY-SUBRC = 0.
+
+LOOP AT it_file into wa_file.
+
+*For Each Screen Fill one record and
+* for Each screen fill one record into IT_BDCDATA
+
+*Prog,9000, X
+*
+*bnka-banks = wa_file-banks.
+* bnka-bankl = wa_file-bankl.
+*etc
+*Prog,9001, X
+*all the fields
+
+*Screen 0100
+
+PERFORM bdc_dynpro USING 'SAPMF02B' '0100' .
+PERFORM bdc_field USING 'BNKA-BANKS' wa_file-banks.
+
+
+clear wa_bdcdata.
+      wa_bdcdata-fnam = 'BNKA-BANKL'.
+      wa_bdcdata-fval = wa_file-bankl.
+append wa_bdcdata to it_bdcdata.
+
+clear wa_bdcdata.
+      wa_bdcdata-fnam = 'BDC_OKCODE'.
+      wa_bdcdata-fval = '/00'.
+append wa_bdcdata to it_bdcdata.
+
+clear wa_bdcdata.
+      wa_bdcdata-program = 'SAPMF02B'.
+      wa_bdcdata-dynpro  = '0110'.
+      wa_bdcdata-dynbegin = 'X'.
+append wa_bdcdata to it_bdcdata.
+
+clear wa_bdcdata.
+      wa_bdcdata-fnam = 'BNKA_ADDR_UI-BANK_NAME'.
+      wa_bdcdata-fval = wa_file-bank_name.
+append wa_bdcdata to it_bdcdata.
+
+clear wa_bdcdata.
+      wa_bdcdata-fnam = 'BDC_OKCODE'.
+      wa_bdcdata-fval = '=UPDA'.
+append wa_bdcdata to it_bdcdata.
+
+call TRANSACTION 'FI01' USING it_bdcdata
+                        mode  'N'  "A - All screens - Defualt
+                                    "E = Error Screens
+                                    "N - No Screens
+                   MESSAGES INTO it_bdcmsgcoll.
+
+
+clear it_bdcdata.
+ENDLOOP.
+data v_msg type string.
+LOOP AT it_bdcmsgcoll into wa_bdcmsgcoll.
+CALL FUNCTION 'FORMAT_MESSAGE'
+ EXPORTING
+   ID              = wa_bdcmsgcoll-MSGID
+*   LANG            = '-D'
+   NO              = wa_bdcmsgcoll-MSGNr
+   V1              = wa_bdcmsgcoll-MSGV1
+   V2              = wa_bdcmsgcoll-MSGV2
+   V3              = wa_bdcmsgcoll-MSGV3
+   V4              = wa_bdcmsgcoll-MSGV4
+ IMPORTING
+   MSG             = v_msg
+* EXCEPTIONS
+*   NOT_FOUND       = 1
+*   OTHERS          = 2
+          .
+IF sy-subrc = 0.
+write /  v_msg COLOR 1.
+ENDIF.
+
+
+ENDLOOP.
+
+ENDIF.
