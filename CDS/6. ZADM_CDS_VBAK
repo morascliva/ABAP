@@ -1,0 +1,31 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'CDS View for Sales Doc Header'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define view entity zadm_cds_vbak 
+with parameters sorg : vkorg  ,  //abap.char( 3 )
+                tar_ceky : waerk,
+                exr_dt   : abap.dats
+
+as select from vbak
+{
+  key vbeln,
+      vkorg,
+@Semantics.amount.currencyCode: 'waerk'            
+      netwr,
+      waerk,
+@Semantics.amount.currencyCode: 'target_ckey'  
+      currency_conversion( amount => netwr, 
+                            source_currency => waerk, 
+                            target_currency => $parameters.tar_ceky, 
+                            exchange_rate_date => $parameters.exr_dt ) as tar_amt,
+      $parameters.tar_ceky as target_ckey                      
+    
+} where vkorg =  $parameters.sorg
+  and  waerk <> ' '
+ 
