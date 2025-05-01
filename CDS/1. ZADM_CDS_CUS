@@ -1,0 +1,20 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'CDS For Customers list'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+@OData.publish: true
+define view entity zadm_CDS_Cus as select from kna1
+{
+    key kunnr,
+        name1,
+        name2,
+        concat_with_space( name1, name2, 3 ) as full_name,
+        ort01,
+        upper( ort01 ) as uort01,
+        land1
+}
