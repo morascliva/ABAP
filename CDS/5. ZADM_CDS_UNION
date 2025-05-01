@@ -1,0 +1,27 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Unions @ CDS View'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define view entity zadm_cds_union as
+
+ select from kna1
+{
+    kunnr as partner,
+    name1,
+    land1,
+    'C' as ptype
+} where land1 = 'IN'
+union
+ select from lfa1
+{
+    lifnr as partner,
+    name1,
+    land1,
+    'V' as ptype
+} where land1 = 'IN'
+ 
