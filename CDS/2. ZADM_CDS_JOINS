@@ -1,0 +1,37 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'CDS with Joins'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define view entity zadm_cds_joins 
+with parameters sorg : vkorg,
+                prtyy : abap.char( 10 )
+as 
+
+select from  zadm_cds_slsHdr( sales_org : $parameters.sorg) left outer join vbap
+on zadm_cds_slsHdr.vbeln  = vbap.vbeln
+{
+// Amount and Qty fields must have reference fields i.e Curr.Key and Unit
+/* multi
+line
+comment
+*/
+
+     zadm_cds_slsHdr.vbeln,
+     zadm_cds_slsHdr.vkorg,
+     zadm_cds_slsHdr.kunnr,
+@Semantics.amount.currencyCode: 'waerk'        
+     zadm_cds_slsHdr.netwr,
+     zadm_cds_slsHdr.waerk,
+     zadm_cds_slsHdr.prty,
+    vbap.posnr,
+@Semantics.amount.currencyCode: 'waerk'   
+    vbap.netpr,
+@Semantics.quantity.unitOfMeasure: 'meins'    
+    vbap.zmeng,
+    vbap.meins
+} where zadm_cds_slsHdr.prty = $parameters.prtyy
