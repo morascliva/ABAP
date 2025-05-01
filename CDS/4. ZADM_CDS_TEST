@@ -1,0 +1,14 @@
+@AbapCatalog.sqlViewName: 'ZADM_SQL_TEST'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'CDS for testing @ SQL View based'
+@Metadata.ignorePropagatedAnnotations: true
+define view ZADM_CDS_test as select from vbak
+{
+key vbeln,
+    vkorg,
+    kunnr,
+    netwr
+    
+}
