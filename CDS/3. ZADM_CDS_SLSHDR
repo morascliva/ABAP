@@ -1,0 +1,28 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'CDS for Sales Header'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define view entity zadm_cds_slsHdr
+with parameters sales_org : vkorg
+ as select from vbak
+{
+key vbeln,
+         vkorg,
+         kunnr,
+ @Semantics.amount.currencyCode: 'waerk'        
+         netwr,
+         waerk,
+   case
+        when netwr between 1 and 1000 then 'Low'
+        when netwr between 1001 and 5000 then 'Medium'
+        when netwr > 6000 then 'High'
+      else 'NA'
+    end as prty
+} 
+where vkorg =  $parameters.sales_org   
+
