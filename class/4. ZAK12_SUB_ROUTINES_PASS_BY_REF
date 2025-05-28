@@ -1,4 +1,5 @@
 
+
 data v_count type i VALUE 10.
 
 PERFORM process_data USING v_count.
